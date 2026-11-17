@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEA Noise Manager</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAADvklEQVRYhcWX709TVxzGzx+xCBRxOgUHFPtuL6DyS1QkulXjJtC1wNVhES3InAYbQBonQgsItMUgYVOMFGxZJtlgERQlqG/E304RjQpsKUMw7E0DmY8597alhduK7kpP8sn55uR7n8/z9hLidqIY02oJYzRJGOOQhDHaJTuNEASaxWWaqMPd6TpRWbUHo7LqZtYwdfiYOBwHeOS1WEzEmTUFrHyNQh8WmXFiRpxxAosJdUYqqsOJWFFlEiur4B8qDSTiW/1QpEIPPzFIIuQV9gi5Dv6hwk7C08vxoaQWN4Oep6PjH5xBwtPK8L7Yp2fw35s3yKtuZwuMjL1+7wwn5PPUH8FHhqIYMvkR3hvDw8Djx6jUnWFv290/oSupxx/Wi6g/3jRvPzFdy+ugkNXfHAUfSnkRZOklrvtoYR2qdc1Qq8pcBfTlp10FfmmwsO99rZ0e39E7Ia2U10EhYV9rsRC6bjzE2MS/yK+2wnn2O+aRsUnUtV1hZ+vl2wvKc0LCth/BQui67ihQdd6tgMWtQK+jwC3oz3bj9/772HG48Z25JHRbMbyRqmmEoa0X2cfOouv6A4xNTCGvss1VIL+Km0dsk6htvcwVuDTgsesrn0JWbS2CN7SnfsOz0XGctF5F1zVHqL7VVcBZhi1gvsQV6Bnw2PWVTyErZRp4o/RUB56N/oN66xV0XrsP28QU1HrzbAFHmWHbBGrMPexs6bnpsesrn0JWflkIb5Q2XOAKWHrR2X+PC61omS2ga5kt0NLNFei+6bHrK59CPttyCN5QV5xD/+0n0DZcQNOvfRh49ALKokY8eWnD87/GIdc04OXfr9B3axAaYzs7G8w9Hru+8ilkxeaDcCc+bR9ONv2McxaroNBMmj3XR5anHIA7yfIcTJ6JxlSz8MiUuz1cFLJ8UwHm8lOJTHB5x/GUeR4K+TQ5H3ORfLUXw42xgslfN8dgY1r2PA+FLNuQBz40eTsEK9Ci3cLroJCQ9fvAx4qNe2HWbsar09L/Jb9jTMQXMhWvg0JCknLhT0hwosq+dF0OKFKmHPvru6E2XoSqsgPi7YVYlpSLTfkmQd6TcmsQkrSHdVGom4jiVUPBCSpQVqUUYGliDjtHbj0EpqwduTWdSFYbBXt3uiiiBNUgCYrPNonis+EPguK+MxCRdFdYUNzOaVHcLiwm1BkcuzuU/TsKWMv8ELSWwWISKGW4XzPiOIExWd8HSjOnA6VZ+LhQR6an3Hk+ic0MXRKtNAREKweXRCvtATEZEAI2i8s0UIe78y0Rx8C6d/InTwAAAABJRU5ErkJggg==">
+<meta name="theme-color" content="#2f6496">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script src="lib/xlsx.full.min.js"></script>
+<script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) navigator.serviceWorker.register("sw.js").catch(() => {});</script>
+<style>
+:root{--bg:#eef0f1;--pan:#fff;--pan2:#f7f8f9;--line:#d8dde2;--ink:#1c232b;--mut:#66717d;--blue:#2c5f95;--blue2:#dde7f2;--bar:#2f6296;--barL:#c3d3e5;--mag:#c2185b;--ok:#23845a;--bad:#c62828;--warn:#b26a00;
+--mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;--sans:'IBM Plex Sans',system-ui,Segoe UI,sans-serif}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 var(--sans);overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.mono{font-family:var(--mono)}
+header{height:56px;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--pan);border-bottom:1px solid var(--line)}
+header h1{font-size:20px;margin:0;font-weight:700;letter-spacing:-.2px;white-space:nowrap}
+.ver{font:500 11px var(--mono);border:1px solid var(--line);border-radius:10px;padding:1px 7px;color:var(--mut)}
+.sub{font:12px var(--mono);color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid var(--line);background:var(--pan);border-radius:6px;white-space:nowrap}
+.btn:hover{background:var(--pan2);border-color:#b9c2cb}
+.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.pri:hover{background:#244f7d}
+.btn.sm{height:28px;padding:0 9px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.btn svg{width:15px;height:15px}
+.fname{font:13px var(--mono);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#app{display:grid;grid-template-columns:var(--sw,350px) 6px minmax(0,1fr);height:calc(100% - 56px)}
+aside{background:var(--pan);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+#split{cursor:col-resize;background:transparent}
+#split:hover{background:var(--blue2)}
+.sech{display:flex;align-items:center;gap:4px;padding:10px 12px 6px;font:600 12px var(--sans);letter-spacing:.6px;color:var(--mut);text-transform:uppercase}
+.sech span{flex:1}
+.ib{width:28px;height:26px;border:0;background:none;border-radius:5px;display:inline-grid;place-items:center;color:var(--mut)}
+.ib:hover{background:var(--pan2);color:var(--ink)}
+.ib svg{width:16px;height:16px}
+#conds{padding:0 8px 8px;border-bottom:1px solid var(--line);max-height:34%;overflow:auto}
+.cond{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;cursor:pointer;user-select:none}
+.cond:hover{background:var(--pan2)}
+.cond.act{background:var(--blue2)}
+.cond .dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--blue);flex:none}
+.cond.act .dot{background:var(--blue)}
+.cond .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.cond .cnt{font:12px var(--mono);color:var(--mut)}
+.cond.sel{outline:1.5px solid var(--blue)}
+#tree{flex:1;overflow:auto;padding:4px 6px 10px}
+.tr{display:flex;align-items:center;gap:5px;height:29px;padding-right:6px;border-radius:5px;cursor:pointer;user-select:none;white-space:nowrap}
+.tr:hover{background:var(--pan2)}
+.tr.sel{background:var(--blue2)}
+.tr.dropin{outline:2px dashed var(--blue)}
+.tr.dropbefore{box-shadow:inset 0 2px 0 var(--blue)}
+.car{width:16px;flex:none;text-align:center;color:var(--mut);font-size:11px}
+.tr .ic{width:16px;height:16px;flex:none;color:var(--blue)}
+.tr .fic{color:#c98a2b}
+.tr .nm{flex:1;overflow:hidden;text-overflow:ellipsis}
+.tr .lv{font:12.5px var(--mono);color:var(--mut)}
+.tr .lv.bad{color:var(--bad);font-weight:600}
+.tr .badge{font:11px var(--mono);border:1px solid var(--line);border-radius:9px;padding:0 6px;color:var(--mut)}
+.tr.off .nm,.tr.off .lv{color:#a7b0b9;text-decoration:line-through}
+.tr input[type=checkbox]{margin:0;accent-color:var(--blue)}
+.sw{width:9px;height:9px;border-radius:2px;flex:none}
+.tr input.ren{height:24px;padding:0 4px;border:1px solid var(--blue);border-radius:4px;flex:1}
+.hint{border-top:1px solid var(--line);padding:8px 12px;font-size:12px;color:var(--mut);line-height:1.6}
+kbd{font:11px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:var(--pan2)}
+main{overflow:auto;padding:18px 20px 40px}
+.card{background:var(--pan);border:1px solid var(--line);border-radius:8px}
+.crumb{font:12px var(--mono);color:var(--mut);margin-bottom:2px}
+.head{display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap}
+.head h2{font-size:27px;margin:0;font-weight:700;letter-spacing:-.3px;flex:1;min-width:220px}
+.kpis{display:flex;gap:26px;flex-wrap:wrap}
+.kpi .l{font:600 11px var(--sans);letter-spacing:.6px;color:var(--mut);text-transform:uppercase}
+.kpi .v{font:600 30px var(--mono);letter-spacing:-.5px;line-height:1.1}
+.kpi .v.s{font-size:20px}
+.kpi .u{font:13px var(--mono);color:var(--mut);margin-left:3px}
+.good{color:var(--ok)}.bad{color:var(--bad)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin:10px 0 12px;color:var(--mut);font-size:13px}
+.meta b{font:500 13px var(--mono);color:var(--ink)}
+.tool{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-bottom:10px;color:var(--mut);font-size:13px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--pan)}
+.seg button{border:0;background:none;padding:0 11px;height:30px;font:13px var(--mono);color:var(--mut)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--blue);color:#fff}
+.tool input.yr{width:66px;height:30px;border:1px solid var(--line);border-radius:5px;padding:0 6px;font:13px var(--mono)}
+.chip{display:inline-flex;align-items:center;gap:5px;font:12.5px var(--mono);padding:2px 8px;border:1px solid var(--line);border-radius:12px;background:var(--pan);cursor:pointer;user-select:none}
+.chip.offc{opacity:.45;text-decoration:line-through}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px}
+@media(max-width:1100px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.fig{position:relative;height:400px}
+.fig canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;outline:none}
+.leg{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-top:1px solid var(--line)}
+.curp{padding:14px 16px}
+.curp h4{margin:0 0 6px;font:600 12px var(--sans);letter-spacing:.6px;color:var(--mut);text-transform:uppercase}
+.curp .big{font:600 24px var(--mono)}
+.curp .sm{font:12px var(--mono);color:var(--mut);margin-bottom:8px}
+.kv{display:flex;align-items:center;gap:6px;font-size:13px;padding:2px 0}
+.kv .k{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kv .v{font:13px var(--mono)}
+.kv .p{font:11.5px var(--mono);color:var(--mut);width:42px;text-align:right}
+.curp hr{border:0;border-top:1px solid var(--line);margin:8px 0}
+.secttl{display:flex;align-items:center;gap:10px;margin:22px 0 8px;flex-wrap:wrap}
+.secttl h3{margin:0;font:600 13px var(--sans);letter-spacing:.6px;text-transform:uppercase}
+.secttl .note{color:var(--mut);font-size:13px;flex:1}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--pan)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:5px 9px;border-bottom:1px solid #e8ebee;text-align:right;white-space:nowrap}
+th{font-weight:600;background:var(--pan2);position:sticky;top:0;z-index:1;color:#3a444e}
+td.t,th.t{text-align:left}
+td{font-family:var(--mono)}
+td.t{font-family:var(--sans)}
+tr.rowlink{cursor:pointer}
+tr.rowlink:hover td{background:#f3f7fb}
+tr.offr td{color:#a7b0b9}
+tr.tot td{font-weight:600;background:var(--pan2)}
+td.hl,th.hl{background:#eef4fb}
+td input.num{width:64px;height:26px;border:1px solid var(--line);border-radius:4px;padding:0 5px;text-align:right;font:13px var(--mono)}
+td input[type=checkbox]{accent-color:var(--blue)}
+.barcell{width:160px}
+.hb{height:10px;background:var(--blue2);border-radius:2px;position:relative}
+.hb i{position:absolute;inset:0 auto 0 0;background:var(--bar);border-radius:2px}
+.hb b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--bad)}
+.exc{color:var(--bad);font-weight:600}
+.ok{color:var(--ok)}
+.empty{max-width:640px;margin:8vh auto;text-align:center;color:var(--mut)}
+.empty h2{color:var(--ink);font-size:24px;margin:0 0 8px}
+.drop{margin:22px auto 0;border:2px dashed #b8c4d0;border-radius:12px;padding:38px 20px;background:var(--pan)}
+.drop.over{border-color:var(--blue);background:#f2f7fc}
+.condhead input.cn{font:700 26px var(--sans);border:1px solid transparent;border-radius:6px;padding:0 6px;margin-left:-7px;background:none;width:100%}
+.condhead input.cn:hover,.condhead input.cn:focus{border-color:var(--line);background:var(--pan)}
+textarea.notes{width:100%;min-height:52px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:13px;resize:vertical;background:var(--pan)}
+#menu{position:fixed;z-index:50;background:var(--pan);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(20,30,40,.16);padding:4px;min-width:210px;display:none}
+#menu button{display:flex;width:100%;justify-content:space-between;gap:16px;border:0;background:none;padding:7px 10px;border-radius:5px;text-align:left;font-size:13.5px}
+#menu button:hover{background:var(--blue2)}
+#menu button kbd{color:var(--mut)}
+#menu hr{border:0;border-top:1px solid var(--line);margin:4px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f2a35;color:#fff;padding:9px 16px;border-radius:8px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .25s;max-width:80vw}
+#toast.on{opacity:1}
+.tg-a{background:#e6f4ec;border-color:#a9d6bb;color:#1d6b45}.tg-j{background:#eaf1fb;border-color:#b5cbe8;color:#2c5f95}.tg-d{background:#fbf1e3;border-color:#e8c99a;color:#8a5a12}
+.tg-x{background:#fdecec;border-color:#efb3b3;color:#a32020}
+#models{padding:0 10px 6px;border-bottom:1px solid var(--line)}
+.mrow{display:flex;align-items:center;gap:8px;padding:3px 2px;font-size:13.5px}
+.mrow .nm{font-weight:600;cursor:text;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .mf{flex:1;font:11.5px var(--mono);color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msel{cursor:pointer;border-radius:6px;padding:4px 6px;border:1.5px solid transparent}.msel:hover{background:var(--pan2)}.msel.on{background:var(--blue2);border-color:var(--blue)}
+.mhint{font-size:11.5px;color:var(--mut);padding:2px 4px 4px;line-height:1.35}
+.mtag{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--sans);padding:2px 9px 2px 3px;border-radius:12px;margin-left:8px;vertical-align:middle;text-transform:none;letter-spacing:0}
+.mtag.a{background:#fbeedd;color:#8a5a12}.mtag.b{background:var(--blue2);color:var(--blue)}
+.mb{font:600 11px var(--mono);width:18px;height:18px;border-radius:4px;display:inline-grid;place-items:center;background:#e0a35a;color:#fff;flex:none}.mb.b{background:var(--blue)}
+.tr .dl{font:11px var(--mono);color:var(--mut);min-width:40px;text-align:right}.tr .dl.good{color:var(--ok)}.tr .dl.bad{color:var(--bad)}
+#dlg{position:fixed;inset:0;background:rgba(20,30,40,.35);display:grid;place-items:center;z-index:60}
+.dlgb{padding:18px 20px;width:min(460px,92vw);max-height:88vh;overflow:auto}
+.dl{display:block;margin:6px 0;font-size:14px}.dl select{margin-left:8px;height:30px;border:1px solid var(--line);border-radius:5px}
+.pill{display:inline-block;font:11.5px var(--mono);padding:1px 7px;border-radius:9px;background:var(--pan2);border:1px solid var(--line)}
+@media(prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <img src="data:image/png;base64,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" alt="" width="30" height="30" style="border-radius:7px;flex:none">
+  <h1>SEA Noise Manager</h1><span class="ver">v1.3</span>
+  <span class="sub">Designer Noise SEA results · octave bands · navigation conditions</span>
+  <button class="btn pri" id="bImp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg>Import Excel</button>
+  <span class="fname" id="fname">no project</span>
+  <button class="btn" id="bNew">New</button>
+  <button class="btn" id="bOpen">Open</button>
+  <button class="btn" id="bSave">Save</button>
+  <button class="btn" id="bXls">Export Excel</button>
+  <button class="btn" id="bRep">Report</button>
+  <button class="btn" id="bUndo" title="Ctrl+Z">Undo</button>
+  <input type="file" id="fImp" accept=".xls,.xlsx,.xlsm" hidden>
+  <input type="file" id="fOpen" accept=".json" hidden>
+  <input type="file" id="fImpB" accept=".xls,.xlsx,.xlsm" hidden>
+</header>
+<div id="app">
+  <aside>
+    <div class="sech"><span>Models</span>
+      <button class="ib" id="bLoadB" title="Load comparison model B (e.g. treated)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+    <div id="models"></div>
+    <div class="sech"><span>Navigation conditions</span>
+      <button class="ib" id="bNewCond" title="New condition"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+    <div id="conds"></div>
+    <div class="sech"><span>Compartments</span>
+      <button class="ib" id="bNewF" title="New folder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h6l2 2h10v10H3z"/><path d="M14 14h4m-2-2v4"/></svg></button>
+      <button class="ib" id="bExp" title="Expand all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+      <button class="ib" id="bCol" title="Collapse all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 15 6-6 6 6"/></svg></button>
+    </div>
+    <div id="tree" tabindex="0"></div>
+    <div class="hint">Click a condition to make it active; ticks on sources switch them on/off in it. Right-click for folders, rename or move. Drag compartments into folders. <kbd>F2</kbd> rename · <kbd>Del</kbd> delete · <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo</div>
+  </aside>
+  <div id="split"></div>
+  <main id="main"></main>
+</div>
+<div id="menu"></div>
+<div id="toast"></div>
+<script>
+{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LS='seaNoiseMgr.v1';
+const PAL=['#2f6db5','#e07b1a','#23946a','#c2185b','#7b5cc4','#8c6d1f','#1597ad','#d6452f','#56697c','#8fa612','#b0509e','#3f51b5','#e0a21a','#4e9a3a','#a0522d','#00838f'];
+const PATHC={AB:'#e07b1a',SB:'#2f6db5',SSB:'#23946a',HVAC:'#7b5cc4',Direct:'#56697c'};
+const PATHN={AB:'Airborne',SB:'Structure-borne',SSB:'Secondary structure-borne',HVAC:'HVAC',Direct:'Direct field'};
+const WA={10:-70.4,12.5:-63.4,16:-56.7,20:-50.5,25:-44.7,31.5:-39.4,40:-34.6,50:-30.2,63:-26.2,80:-22.5,100:-19.1,125:-16.1,160:-13.4,200:-10.9,250:-8.6,315:-6.6,400:-4.8,500:-3.2,630:-1.9,800:-0.8,1000:0,1250:.6,1600:1,2000:1.2,2500:1.3,3150:1.2,4000:1,5000:.5,6300:-.1,8000:-1.1,10000:-2.5,12500:-4.3,16000:-6.6,20000:-9.3};
+const WC={10:-14.3,12.5:-11.2,16:-8.5,20:-6.2,25:-4.4,31.5:-3,40:-2,50:-1.3,63:-.8,80:-.5,100:-.3,125:-.2,160:-.1,200:0,250:0,315:0,400:0,500:0,630:0,800:0,1000:0,1250:0,1600:-.1,2000:-.2,2500:-.3,3150:-.5,4000:-.8,5000:-1.3,6300:-2,8000:-3,10000:-4.4,12500:-6.2,16000:-8.5,20000:-11.2};
+function wt(f,w){
+  if(w==='Z')return 0;
+  const t=(w==='A'?WA:WC)[f]; if(t!=null)return t;
+  const f2=f*f,a=12194**2;
+  if(w==='A')return 20*Math.log10(a*f2*f2/((f2+20.6**2)*Math.sqrt((f2+107.7**2)*(f2+737.9**2))*(f2+a)))+2;
+  return 20*Math.log10(a*f2/((f2+20.6**2)*(f2+a)))+.06;
+}
+const dB=E=>E>0?10*Math.log10(E):null;
+const f1=v=>v==null||!isFinite(v)?'–':v.toFixed(1);
+const fsg=v=>v==null||!isFinite(v)?'–':(v>0?'+':'')+v.toFixed(1);
+const bl=f=>f>=1000?(f/1000)+'k':String(f);
+const short=n=>String(n).replace(/^comp\s*\d+\s*:\s*/i,'');
+let nid=1;const uid=p=>p+(Date.now().toString(36))+(nid++);
+
+/* ---------- state ---------- */
+let P=null;
+const UI={cmp:false,det:'A',sel:null,w:'A',mode:'src',cur:null,ymin:'',ymax:'',pf:{},emode:'rad',eov:'src',lu:'dB'};
+let undo=[];
+
+function save(){try{localStorage.setItem(LS,JSON.stringify({P,pf:UI.pf,w:UI.w,mode:UI.mode,emode:UI.emode,eov:UI.eov,lu:UI.lu,cmp:UI.cmp,det:UI.det}))}catch(e){}}
+function load(){try{const o=JSON.parse(localStorage.getItem(LS)||'null');if(o&&o.P){P=o.P;Object.assign(UI.pf,o.pf||{});UI.w=o.w||'A';UI.mode=o.mode||'src';UI.emode=o.emode||'rad';UI.eov=o.eov||'src';UI.lu=o.lu||'dB';UI.cmp=!!o.cmp;UI.det=o.det||'A';UI.sel={t:'f',id:P.tree.ch[0]?.id}}}catch(e){}}
+function snap(){return JSON.stringify({mn:P.mname,bn:P.alt?.name,tree:P.tree,conds:P.conds,active:P.active,elAlias:P.elAlias||{},cm:Object.fromEntries(Object.values(P.comps).map(c=>[c.id,{crit:c.crit,alias:c.alias}]))})}
+function commit(fn,keepSel){if(!P)return;undo.push(snap());if(undo.length>80)undo.shift();fn();save();render()}
+function doUndo(){if(!undo.length){toast('Nothing to undo');return}const o=JSON.parse(undo.pop());P.mname=o.mn;if(P.alt&&o.bn)P.alt.name=o.bn;P.tree=o.tree;P.conds=o.conds;P.active=o.active;P.elAlias=o.elAlias||{};for(const id in o.cm){if(P.comps[id]){P.comps[id].crit=o.cm[id].crit;P.comps[id].alias=o.cm[id].alias}}if(UI.sel&&!validSel())UI.sel={t:'f',id:P.tree.ch[0]?.id};save();render()}
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)}
+
+/* ---------- parsing Designer Noise export ---------- */
+const str=v=>v==null?'':String(v).trim();
+function num(v){if(typeof v==='number')return isFinite(v)?v:null;if(typeof v==='string'){const t=v.trim().replace(',','.');if(/^[-+]?\d+(\.\d+)?(e[-+]?\d+)?$/i.test(t))return +t}return null}
+function bandHdr(h){const cols=[],bands=[];let j=3;while(j<h.length&&num(h[j])!=null){cols.push(j);bands.push(num(h[j]));j++}return{cols,bands,aCol:j}}
+function parseAOA(aoa){
+  let hC=-1,hP=-1;
+  aoa.forEach((r,i)=>{const a=str(r&&r[0]).toLowerCase();if(hC<0&&a==='compartments')hC=i;if(hP<0&&a==='positions of interest')hP=i});
+  if(hC<0)throw Error('No "Compartments" block found (expected the SPL sheet of the Designer Noise report).');
+  const H=bandHdr(aoa[hC]);if(!H.bands.length)throw Error('No octave band header found.');
+  const items=[];let cur=null,src=null;
+  for(let i=hC+1;i<aoa.length;i++){
+    const r=aoa[i]||[],c0=str(r[0]),c1=str(r[1]),c2=str(r[2]);
+    if(c0){cur={name:c0,kind:'comp',src:{},crit:null,critName:'',xls:null,allp:{}};items.push(cur);src=null}
+    if(!cur)continue;
+    if(c1)src=c1;
+    if(!src||!c2)continue;
+    const v=H.cols.map(k=>num(r[k])),sl=src.toLowerCase(),pl=c2.toLowerCase();
+    if(sl==='all sources'){if(pl==='total')cur.xls=num(r[H.aCol]);else if(v.some(x=>x!=null))cur.allp[c2]=v;continue}
+    if(sl==='criteria'){if(pl!=='none'&&pl!=='excess'){cur.critName=c2;const a=num(r[H.aCol]);if(a!=null)cur.crit=a}continue}
+    if(pl==='total')continue;
+    (cur.src[src]=cur.src[src]||{})[c2]=v;
+  }
+  for(const c of items){ /* paths that appear only in "All Sources" (e.g. HVAC breakout/outlet) */
+    const have=new Set();Object.values(c.src).forEach(o=>Object.keys(o).forEach(p=>have.add(p)));
+    for(const p in c.allp)if(!have.has(p))(c.src['HVAC (unattributed)']=c.src['HVAC (unattributed)']||{})[p]=c.allp[p];
+    delete c.allp;
+  }
+  if(hP>=0&&hP<hC){
+    const G=bandHdr(aoa[hP]);let cp=null,s=null;
+    for(let i=hP+1;i<hC;i++){
+      const r=aoa[i]||[],c0=str(r[0]),c1=str(r[1]),c2=str(r[2]);
+      if(c0){cp={name:c0,kind:'poi',src:{},crit:null,critName:'',xls:null};items.push(cp);s=null}
+      if(!cp||!c1)continue;
+      const l=c1.toLowerCase();
+      if(l==='total'){cp.xls=num(r[G.aCol]);continue}
+      if(l==='criteria'){if(c2&&c2.toLowerCase()!=='none'){cp.critName=c2;const a=num(r[G.aCol]);if(a!=null)cp.crit=a}continue}
+      if(l==='excess')continue;
+      const v=G.cols.map(k=>num(r[k]));
+      if(G.bands.join()!==H.bands.join())continue;
+      cp.src[c1]={Direct:v};
+    }
+  }
+  const sources=[],paths=[];
+  for(const c of items)for(const s in c.src){if(!sources.includes(s))sources.push(s);for(const p in c.src[s])if(!paths.includes(p))paths.push(p)}
+  return{bands:H.bands,items,sources,paths};
+}
+function readWorkbook(buf){
+  if(!window.XLSX)throw Error('SheetJS (xlsx library) could not be loaded.');
+  const wb=XLSX.read(buf,{type:'array'});
+  const names=wb.SheetNames.slice().sort((a,b)=>(b.toUpperCase()==='SPL')-(a.toUpperCase()==='SPL'));
+  const aoaOf=n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:null,blankrows:true});
+  let err,d=null;
+  for(const n of names){try{d=parseAOA(aoaOf(n));d.sheet=n;break}catch(e){err=e}}
+  if(!d)throw err||Error('Empty workbook');
+  d.el=parseElements(key=>{const k=wb.SheetNames.find(x=>x.trim().toLowerCase()===key);return k?aoaOf(k):null},d.bands);
+  return d;
+}
+
+/* ---------- project ---------- */
+function folder(name,ch=[]){return{id:uid('f'),t:'f',name,open:true,ch}}
+function leaf(cid){return{id:uid('n'),t:'c',cid,open:false}}
+function newProject(d,file){
+  const comps={};const fc=folder('Compartments'),fp=folder('Positions of interest');
+  d.items.forEach((it,i)=>{const id=(it.kind==='poi'?'p':'c')+i;comps[id]={id,name:it.name,alias:'',kind:it.kind,src:it.src,crit:it.crit,critName:it.critName,xls:it.xls};(it.kind==='poi'?fp:fc).ch.push(leaf(id))});
+  const root={id:'root',t:'f',name:'root',open:true,ch:[fc]};if(fp.ch.length){fp.open=false;root.ch.push(fp)}
+  const c0={id:uid('k'),name:'All sources',notes:'All sources running (as calculated in Designer Noise).',on:{},off:{}};
+  P={v:1,file,imported:new Date().toISOString(),sheet:d.sheet,bands:d.bands,paths:d.paths,sources:d.sources,comps,tree:root,conds:[c0],active:c0.id,elAlias:{}};
+  P.el=buildEl(d.el,comps);
+  d.paths.forEach(p=>{if(UI.pf[p]==null)UI.pf[p]=true});
+  UI.sel={t:'f',id:fc.id};UI.cur=null;undo=[];
+}
+function mergeProject(d,file){
+  undo.push(snap());
+  const byName={};Object.values(P.comps).forEach(c=>byName[c.kind+'|'+c.name]=c);
+  const comps={},fresh=[];let k=0;
+  d.items.forEach(it=>{const o=byName[it.kind+'|'+it.name];let id;
+    if(o){id=o.id;comps[id]={...o,src:it.src,xls:it.xls,critName:it.critName,crit:o.crit??it.crit}}
+    else{do{id=(it.kind==='poi'?'p':'c')+'x'+(k++)}while(P.comps[id]||comps[id]);comps[id]={id,name:it.name,alias:'',kind:it.kind,src:it.src,crit:it.crit,critName:it.critName,xls:it.xls};fresh.push(id)}});
+  const prune=n=>{n.ch=n.ch.filter(x=>x.t==='f'||comps[x.cid]);n.ch.forEach(x=>x.t==='f'&&prune(x))};
+  P.comps=comps;prune(P.tree);P.el=buildEl(d.el,comps);remapAlt();P.elAlias=P.elAlias||{};
+  if(fresh.length){const f=folder('New in '+file);fresh.forEach(id=>f.ch.push(leaf(id)));P.tree.ch.push(f)}
+  P.file=file;P.imported=new Date().toISOString();P.bands=d.bands;P.paths=d.paths;P.sources=d.sources;P.sheet=d.sheet;
+  d.paths.forEach(p=>{if(UI.pf[p]==null)UI.pf[p]=true});
+  if(!validSel())UI.sel={t:'f',id:P.tree.ch[0].id};
+  return fresh.length;
+}
+function importFile(file){
+  const rd=new FileReader();
+  rd.onload=()=>{
+    let d;try{d=readWorkbook(new Uint8Array(rd.result))}catch(e){toast('Import failed: '+e.message);return}
+    let msg;
+    if(P&&confirm('Update the current project with these results?\n\nOK = keep conditions, folders and criteria (matched by compartment name)\nCancel = start a new project')){const n=mergeProject(d,file.name);msg='Results updated'+(n?` · ${n} new compartments`:'')}
+    else{newProject(d,file.name);msg='Imported'}
+    const nc=d.items.filter(i=>i.kind==='comp').length,np=d.items.length-nc;
+    let dev=0;Object.values(P.comps).forEach(c=>{if(c.xls!=null){const t=wsum(calc(c,{on:{},off:{}},{}).tot,'A');if(t!=null)dev=Math.max(dev,Math.abs(t-c.xls))}});
+    let edev=0,ne=0;const k0={on:{},off:{}};if(P.el)Object.values(P.comps).forEach(c=>{const L=elCalc(c,k0);if(!L.length)return;ne+=L.length;const r=calc(c,k0,{AB:false});const a=wsum(toDB(zero().map((z,i)=>L.reduce((s,x)=>s+(x.sp&&x.sp[i]!=null?10**(x.sp[i]/10):0),0))),'A'),b=wsum(r.tot,'A');if(a!=null&&b!=null)edev=Math.max(edev,Math.abs(a-b))});
+    toast(`${msg}: ${nc} compartments, ${np} positions, ${d.sources.length} sources · max Δ vs Excel totals ${dev.toFixed(1)} dB(A)`+(P.el?` · ${ne} element entries (panels Σ vs SB+SSB: Δ ${edev.toFixed(1)} dB)`:' · no element sheets found'));
+    save();render();
+  };
+  rd.readAsArrayBuffer(file);
+}
+
+/* ---------- calculation ---------- */
+const cond=()=>P.conds.find(c=>c.id===P.active)||P.conds[0];
+const isOn=(k,s)=>k.on[s]!==false;
+let memo=new Map();
+function calc(c,k=cond(),pf=UI.pf){
+  const key=c.id+'|'+k.id;if(k.id&&pf===UI.pf&&memo.has(key))return memo.get(key);
+  const nb=P.bands.length,tot=new Array(nb).fill(0),byP={},srcs=[];
+  for(const s of P.sources){const o=c.src[s];if(!o)continue;
+    const on=isOn(k,s),off=+(k.off[s]||0),g=10**(off/10),E=new Array(nb).fill(0),paths={};let any=false;
+    for(const p in o){if(pf[p]===false)continue;const pv=o[p].map(v=>v==null?null:v+off);paths[p]=pv;
+      pv.forEach((v,i)=>{if(v!=null){E[i]+=10**(v/10);any=true}});
+      if(on){byP[p]=byP[p]||new Array(nb).fill(0);pv.forEach((v,i)=>{if(v!=null)byP[p][i]+=10**(v/10)})}}
+    if(on)E.forEach((e,i)=>tot[i]+=e);
+    srcs.push({s,on,off,sp:any?E.map(dB):null,paths});
+  }
+  const r={tot:tot.some(e=>e>0)?tot.map(dB):null,byP:Object.fromEntries(Object.entries(byP).map(([p,a])=>[p,a.map(dB)])),srcs};
+  if(k.id&&pf===UI.pf)memo.set(key,r);return r;
+}
+function wsum(sp,w){if(!sp)return null;let E=0;sp.forEach((L,i)=>{if(L!=null)E+=10**((L+wt(P.bands[i],w))/10)});return dB(E)}
+const wsp=(sp,w)=>sp?sp.map((L,i)=>L==null?null:L+wt(P.bands[i],w)):null;
+const scol=s=>PAL[P.sources.indexOf(s)%PAL.length];
+const cname=c=>c.alias||short(c.name);
+const ipaths=c=>P.paths.filter(p=>Object.values(c.src).some(o=>o[p]));
+function compA(c,k){return wsum(calc(c,k).tot,'A')}
+function dominant(c,k){const r=calc(c,k);let best=null,bv=-1e9,tv=wsum(r.tot,'A');for(const x of r.srcs){if(!x.on)continue;const v=wsum(x.sp,'A');if(v!=null&&v>bv){bv=v;best=x.s}}return best?{s:best,v:bv,sh:tv!=null?10**((bv-tv)/10)*100:null}:null}
+
+/* ---------- tree helpers ---------- */
+function findNode(id,n=P.tree,par=null){if(n.id===id)return{n,par};for(const c of n.ch||[]){const r=findNode(id,c,n);if(r)return r}return null}
+function pathTo(id){const out=[];const w=(n,acc)=>{if(n.id===id){out.push(...acc);return true}for(const c of n.ch||[])if(w(c,[...acc,n]))return true;return false};w(P.tree,[]);return out.filter(n=>n.id!=='root')}
+function compsIn(n,acc=[]){for(const c of n.ch||[]){if(c.t==='f')compsIn(c,acc);else if(P.comps[c.cid])acc.push({node:c,c:P.comps[c.cid]})}return acc}
+function validSel(){const s=UI.sel;if(!s||!P)return false;if(s.t==='cond')return P.conds.some(c=>c.id===s.id);return!!findNode(s.id)}
+function allFolders(n=P.tree,acc=[]){for(const c of n.ch)if(c.t==='f'){acc.push(c);allFolders(c,acc)}return acc}
+
+/* ---------- icons ---------- */
+const IC={
+ fold:'<svg class="ic fic" viewBox="0 0 24 24" fill="currentColor" opacity=".9"><path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg>',
+ comp:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17v-4M11 17V8M15 17v-6M19 17v-2" stroke-linecap="round"/></svg>',
+ poi:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/></svg>',
+ panel:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6l8-3 8 3v12l-8 3-8-3z"/><path d="M12 3v18"/></svg>',
+ edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>',
+ img:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 6"/></svg>'
+};
+
+/* ---------- sidebar ---------- */
+function rSide(){
+  $('#models').innerHTML=!P?'':`<div class="mrow msel ${!showB()?'on':''}" data-mshow="A" title="Show model A"><span class="mb">A</span><span class="nm" data-mren="A" title="Double-click to rename">${esc(mA())}</span><span class="mf" title="${esc(P.file)}">${esc(P.file)}</span></div>`+
+    (P.alt?`<div class="mrow msel ${showB()?'on':''}" data-mshow="B" title="Show model B"><span class="mb b">B</span><span class="nm" data-mren="B" title="Double-click to rename">${esc(mB())}</span><span class="mf" title="${esc(P.alt.file)}">${esc(P.alt.file)}</span><button class="ib" data-mdel="1" title="Remove model B">×</button></div>
+    <label class="mrow" style="cursor:pointer"><input type="checkbox" id="cmpT" ${UI.cmp?'checked':''}> Compare A vs B</label><div class="mhint">${cmpOn()?'Comparing. The highlighted model is the one used in the detail tables.':'Showing only the highlighted model. Click A or B to switch.'}</div>`:`<button class="btn sm" style="margin:2px 0 4px" id="bLoadB2">Load model B (treated) to compare…</button>`);
+  if(!P){$('#conds').innerHTML='<div style="padding:6px;color:var(--mut);font-size:13px">Import a Designer Noise report to start.</div>';$('#tree').innerHTML='';return}
+  const ns=P.sources.length;
+  $('#conds').innerHTML=P.conds.map(c=>`<div class="cond ${c.id===P.active?'act':''} ${UI.sel?.t==='cond'&&UI.sel.id===c.id?'sel':''}" data-cond="${c.id}" title="${esc(c.notes||'')}"><span class="dot"></span><span class="nm">${esc(c.name)}</span><span class="cnt">${P.sources.filter(s=>isOn(c,s)).length}/${ns}</span><button class="ib" data-edit="${c.id}" title="Edit condition">${IC.edit}</button></div>`).join('');
+  const out=[],k=cond();
+  const walk=(n,d)=>{for(const ch of n.ch){const pad=`style="padding-left:${6+d*16}px"`,sel=UI.sel&&UI.sel.id===ch.id&&(UI.sel.t==='c'||UI.sel.t==='f');
+    if(ch.t==='f'){const cs=compsIn(ch),nx=cs.filter(x=>{const bb=cmpOn()?altOf(x.c):null,v=compA(bb||mv(x.c),k);return x.c.crit!=null&&v!=null&&v>x.c.crit}).length;
+      out.push(`<div class="tr ${sel?'sel':''}" ${pad} data-node="${ch.id}" draggable="true"><span class="car">${ch.open?'▾':'▸'}</span>${IC.fold}<span class="nm">${esc(ch.name)}</span>${nx?`<span class="badge bad" title="over criteria">${nx}▲</span>`:''}<span class="badge">${cs.length}</span></div>`);
+      if(ch.open)walk(ch,d+1)}
+    else{const c=P.comps[ch.cid];if(!c)continue;const bb=cmpOn()?altOf(c):null,va0=compA(mv(c),k),v=bb?compA(bb,k):va0,bad=c.crit!=null&&v!=null&&v>c.crit,dd=bb&&va0!=null&&v!=null?v-va0:null;
+      out.push(`<div class="tr ${sel?'sel':''}" ${pad} data-node="${ch.id}" draggable="true" title="${esc(c.name)}"><span class="car">${ch.open?'▾':'▸'}</span>${c.kind==='poi'?IC.poi:IC.comp}<span class="nm">${esc(cname(c))}</span><span class="lv ${bad?'bad':''}" ${bb?`title="${esc(mA())} ${f1(va0)} → ${esc(mB())} ${f1(v)}"`:''}>${f1(v)}</span>${dd!=null&&Math.abs(dd)>=0.05?`<span class="dl ${dd<-0.05?'good':dd>0.05?'bad':''}">${dd<-0.05?'▼':dd>0.05?'▲':'='}${Math.abs(dd).toFixed(1)}</span>`:''}</div>`);
+      if(ch.open){const r=calc(mv(c),k);for(const x of r.srcs){const sv=UI.sel&&UI.sel.t==='s'&&UI.sel.id===ch.id&&UI.sel.src===x.s;
+        out.push(`<div class="tr ${x.on?'':'off'} ${sv?'sel':''}" style="padding-left:${22+(d+1)*16}px" data-node="${ch.id}" data-src="${esc(x.s)}"><input type="checkbox" data-tog="${esc(x.s)}" ${x.on?'checked':''} title="On/off in “${esc(k.name)}”"><span class="sw" style="background:${scol(x.s)}"></span><span class="nm">${esc(x.s)}${x.off?` <span class="pill">${fsg(x.off)}</span>`:''}</span><span class="lv">${f1(wsum(x.sp,'A'))}</span></div>`)}}
+        const EL=ch.open?elCalc(mv(c),k):[];if(EL.length){out.push(`<div class="tr" style="padding-left:${22+(d+1)*16}px" data-node="${ch.id}" data-egrp="1"><span class="car">${ch.eopen?'▾':'▸'}</span>${IC.panel}<span class="nm">Elements (panels)</span><span class="badge">${EL.length}</span></div>`);
+          if(ch.eopen)EL.map(x=>({x,a:wsum(x.sp,'A')})).sort((p,q)=>(q.a??-1e9)-(p.a??-1e9)).forEach(({x,a})=>{const ev=UI.sel&&UI.sel.t==='e'&&UI.sel.id===ch.id&&+UI.sel.el===x.el,tr=treated(treat(mv(c).id,x.el,elOf(mv(c))));
+            out.push(`<div class="tr ${ev?'sel':''}" style="padding-left:${38+(d+1)*16}px" data-node="${ch.id}" data-el="${x.el}"><span class="nm">${esc(elName(x.el))}${tr?' <span class="pill tg-a" title="treated panel">T</span>':''}</span><span class="lv">${f1(a)}</span></div>`)})}}}};
+  walk(P.tree,0);
+  $('#tree').innerHTML=out.join('')||'<div style="padding:8px;color:var(--mut)">Empty tree – right-click to add a folder.</div>';
+}
+
+/* ---------- chart ---------- */
+let G=null;
+function drawChart(cv,o){
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;if(!W||!H)return;
+  cv.width=W*dpr;cv.height=H*dpr;const x=cv.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);
+  paint(x,W,H,o);
+}
+function paint(x,W,H,o){
+  x.fillStyle='#fff';x.fillRect(0,0,W,H);
+  const nb=o.bands.length,nt=o.totals.length,L=62,R=14,T=o.title?44:22;
+  let lr=[];if(o.leg&&o.lines.length){x.font='12px IBM Plex Mono, monospace';let row=[],wx=0;for(const l of o.lines){const w=x.measureText(l.name).width+30;if(wx+w>W-L-R&&row.length){lr.push(row);row=[];wx=0}row.push([l,wx]);wx+=w}lr.push(row)}
+  const B=48+lr.length*20+(lr.length?8:0);
+  const vals=[...o.bars,...o.lines.flatMap(l=>l.vals),...o.totals.map(t=>t.v)].filter(v=>v!=null);
+  const uy=o.ymax!==''&&!isNaN(+o.ymax),ly=o.ymin!==''&&!isNaN(+o.ymin);let ymax,ymin,nst=0;
+  if(o.nice){let lo=vals.length?Math.min(...vals):0,hi=vals.length?Math.max(...vals):1;if(o.zero)lo=Math.min(0,lo);if(hi-lo<1e-12)hi=lo+(Math.abs(lo)||1);nst=niceStep((hi-lo)/6);ymin=ly?+o.ymin:Math.floor(lo/nst)*nst;ymax=uy?+o.ymax:Math.ceil(hi/nst)*nst}
+  else{ymax=uy?+o.ymax:Math.ceil(((vals.length?Math.max(...vals):60)+3)/10)*10;ymin=ly?+o.ymin:0}
+  if(ymax<=ymin)ymax=ymin+(nst||10);
+  const pw=W-L-R,ph=H-T-B,n=nb+(nt?nt+.6:0),bw=pw/n,yy=v=>T+ph*(1-(Math.max(ymin,Math.min(ymax,v))-ymin)/(ymax-ymin));
+  if(o.title){x.fillStyle='#1c232b';x.font='600 15px IBM Plex Sans, sans-serif';x.textAlign='left';x.fillText(o.title,L,22)}
+  x.font='12px IBM Plex Mono, monospace';x.textAlign='right';x.textBaseline='middle';
+  const step=o.nice?niceStep((ymax-ymin)/6):[5,10,20,25,50].find(s=>(ymax-ymin)/s<=10)||100,dg=Math.max(0,(String(+step.toPrecision(3)).split('.')[1]||'').length);
+  for(let v=Math.ceil(ymin/step-1e-9)*step;v<=ymax+step*1e-6;v+=step){const y=yy(v);x.strokeStyle='#e6e9ec';x.lineWidth=1;x.beginPath();x.moveTo(L,y);x.lineTo(W-R,y);x.stroke();x.fillStyle='#55606b';x.fillText(v.toFixed(dg),L-8,y)}
+  x.strokeStyle='#9aa4ae';x.beginPath();x.moveTo(L,T);x.lineTo(L,T+ph);x.lineTo(W-R,T+ph);x.stroke();
+  x.save();x.translate(16,T+ph/2);x.rotate(-Math.PI/2);x.textAlign='center';x.font='13px IBM Plex Sans, sans-serif';x.fillStyle='#3a444e';x.fillText(o.ylab,0,0);x.restore();
+  const geo=[];
+  for(let i=0;i<nb;i++){const x0=L+i*bw,v=o.bars[i];geo.push([x0,bw]);
+    if(o.cur===i){x.fillStyle='#f1f3f5';x.fillRect(x0+1,T,bw-2,ph)}
+    if(v!=null&&v>ymin){x.fillStyle=o.barC;x.fillRect(x0+bw*.08,yy(v),bw*.84,T+ph-yy(v))}
+    if(o.cur===i){x.strokeStyle='#c2185b';x.lineWidth=2;x.strokeRect(x0+2,T+1,bw-4,ph-1)}
+    x.fillStyle='#3a444e';x.textAlign='center';x.textBaseline='top';x.font='12px IBM Plex Mono, monospace';x.fillText(bl(o.bands[i]),x0+bw/2,T+ph+7)}
+  x.textBaseline='alphabetic';x.font='13px IBM Plex Sans, sans-serif';x.fillText(o.xlab,L+nb*bw/2,T+ph+42);
+  for(const l of o.lines){x.strokeStyle=l.color;x.fillStyle=l.color;x.lineWidth=l.w||1.8;x.setLineDash(l.dash||[]);x.beginPath();let pen=false;
+    l.vals.forEach((v,i)=>{if(v==null||v<ymin){pen=false;return}const px=L+i*bw+bw/2,py=yy(v);pen?x.lineTo(px,py):x.moveTo(px,py);pen=true});x.stroke();x.setLineDash([]);
+    l.vals.forEach((v,i)=>{if(v==null||v<ymin)return;x.beginPath();x.arc(L+i*bw+bw/2,yy(v),2.8,0,7);x.fill()})}
+  if(nt){const x00=L+(nb+.6)*bw;x.fillStyle='#f4f6f8';x.fillRect(x00-bw*.3,T,nt*bw+bw*.3,ph);
+    o.totals.forEach((t,j)=>{const x0=x00+j*bw,ci=nb+j;geo.push([x0,bw]);
+      if(t.v!=null){x.fillStyle=t.on?o.totC:'#9fb4cb';x.fillRect(x0+bw*.08,yy(t.v),bw*.84,T+ph-yy(t.v))}
+      if(o.cur===ci){x.strokeStyle='#c2185b';x.lineWidth=2;x.strokeRect(x0+2,T+1,bw-4,ph-1)}
+      x.fillStyle=t.on?'#c2185b':'#3a444e';x.textAlign='center';x.textBaseline='top';x.font='600 13px IBM Plex Mono, monospace';x.fillText(t.label,x0+bw/2,T+ph+7)});
+    if(o.crit!=null&&o.crit>ymin&&o.crit<=ymax){const y=yy(o.crit);x.strokeStyle='#c62828';x.lineWidth=2;x.setLineDash([6,4]);x.beginPath();x.moveTo(x00-bw*.3,y);x.lineTo(x00+nt*bw,y);x.stroke();x.setLineDash([]);x.font='11px IBM Plex Mono, monospace';const ct='crit '+o.crit,cw=x.measureText(ct).width+6;x.fillStyle='rgba(255,255,255,.9)';x.fillRect(x00-bw*.3,y-16,cw,14);x.fillStyle='#c62828';x.textAlign='left';x.textBaseline='bottom';x.fillText(ct,x00-bw*.3+3,y-3)}}
+  lr.forEach((row,ri)=>row.forEach(([l,ox])=>{const y=H-B+56+ri*20;x.fillStyle=l.color;x.fillRect(L+ox,y-5,10,10);x.fillStyle='#3a444e';x.font='12px IBM Plex Mono, monospace';x.textAlign='left';x.textBaseline='middle';x.fillText(l.name,L+ox+15,y)}));
+  if(o.curLabel){x.font='600 13px IBM Plex Mono, monospace';const tw=x.measureText(o.curLabel).width+20;x.fillStyle='#fff';x.strokeStyle='#c2185b';x.lineWidth=1.5;const bx=W-R-tw,by=o.title?30:4;
+    x.beginPath();x.roundRect?x.roundRect(bx,by,tw,22,11):x.rect(bx,by,tw,22);x.fill();x.stroke();x.fillStyle='#c2185b';x.textAlign='left';x.textBaseline='middle';x.fillText(o.curLabel,bx+10,by+11)}
+  G={L,bw,T,ph,geo};
+}
+function niceStep(r){if(!(r>0))return 1;const p=10**Math.floor(Math.log10(r)),f=r/p;return(f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p}
+function hit(ev,cv){if(!G)return null;const r=cv.getBoundingClientRect(),px=ev.clientX-r.left;for(let i=0;i<G.geo.length;i++){const[x0,w]=G.geo[i];if(px>=x0&&px<x0+w)return i}return null}
+
+/* ---------- main views ---------- */
+function render(){
+  memo=new Map();
+  $('#fname').textContent=P?P.file:'no project';
+  ['bSave','bXls','bRep','bUndo','bNewCond','bNewF','bExp','bCol','bLoadB'].forEach(i=>$('#'+i).disabled=!P);
+  rSide();
+  const m=$('#main');
+  if(!P){m.innerHTML=`<div class="empty"><h2>Designer Noise results by navigation condition</h2><p>Import the Excel report exported by Designer Noise (SEA). The SPL sheet is read: received levels per compartment, per source and per path (AB, SB, SSB) in octave bands. Then define navigation conditions by switching sources on/off and adding level offsets.</p><div class="drop" id="drop"><b>Drop the .xls / .xlsx here</b><br>or <button class="btn pri" onclick="document.getElementById('fImp').click()">Import Excel</button><br><br>A saved project (.json) can be reopened with <b>Open</b>.</div></div>`;return}
+  if(!validSel())UI.sel={t:'f',id:P.tree.ch[0]?.id||'root'};
+  const s=UI.sel;
+  if(s.t==='cond')vCond(m,P.conds.find(c=>c.id===s.id));
+  else{const f=findNode(s.id);if(!f)return;if(f.n.t==='f')vFolder(m,f.n);else if(s.t==='s')vSrc(m,f.n,mv(P.comps[f.n.cid]),s.src);else if(s.t==='e')vElem(m,f.n,P.comps[f.n.cid],+s.el);else vComp(m,f.n,P.comps[f.n.cid])}
+}
+function crumb(id,c){return 'FILES \\ '+pathTo(id).filter(n=>n.t==='f').map(n=>esc(n.name)).join(' \\ ')+(P.alt?' '+mTag(c):'')}
+function wSeg(){return`<span>Weighting</span><span class="seg" data-seg="w">${['A','C','Z'].map(w=>`<button class="${UI.w===w?'on':''}" data-v="${w}">${w}</button>`).join('')}</span>`}
+function pathChips(c){return`<span>Paths</span>${(c?ipaths(c):P.paths).map(p=>`<span class="chip ${UI.pf[p]===false?'offc':''}" data-pf="${p}" title="${PATHN[p]||p}"><span class="sw" style="background:${PATHC[p]||'#888'}"></span>${p}</span>`).join('')}`}
+function yr(){return`<span>Y range</span><input class="yr" data-y="ymin" placeholder="auto" value="${esc(UI.ymin)}"><span>to</span><input class="yr" data-y="ymax" placeholder="auto" value="${esc(UI.ymax)}">`}
+const wu=()=>`dB(${UI.w})`;
+
+function vComp(m,node,cA){
+  const bAlt=altOf(cA),cm=cmpOn()&&bAlt,c=showB()&&bAlt?bAlt:cA;if(UI.mode==='ab'&&!cm)UI.mode='tot';
+  const k=cond(),r=calc(c,k),A=wsum(r.tot,'A'),C=wsum(r.tot,'C'),Z=wsum(r.tot,'Z'),mg=cA.crit!=null&&A!=null?cA.crit-A:null;
+  const act=r.srcs.filter(x=>x.on&&x.sp),rank=act.map(x=>({...x,a:wsum(x.sp,'A'),w:wsum(x.sp,UI.w)})).sort((a,b)=>(b.w??-1e9)-(a.w??-1e9));
+  const nb=P.bands.length;if(UI.cur==null||UI.cur>nb+2)UI.cur=nb+['A','C','Z'].indexOf(UI.w);
+  m.innerHTML=`<div class="crumb">${crumb(node.id,c)}</div>
+  <div class="head"><h2 title="${esc(c.name)}">${esc(cname(c))}</h2><div class="kpis">
+   <div class="kpi"><div class="l">Total · ${esc(k.name)}</div><div class="v">${f1(A)}<span class="u">dB(A)</span></div></div>
+   <div class="kpi"><div class="l">dB(C)</div><div class="v s">${f1(C)}</div></div><div class="kpi"><div class="l">dB(Z)</div><div class="v s">${f1(Z)}</div></div>
+   <div class="kpi"><div class="l">Criteria dB(A)</div><div class="v s"><input class="num yr" id="crit" value="${cA.crit??''}" placeholder="none" style="width:72px;height:32px;font-size:17px"></div></div>
+   <div class="kpi"><div class="l">Margin</div><div class="v s ${mg==null?'':mg<0?'bad':'good'}">${fsg(mg)}</div></div></div></div>
+  <div class="meta"><span>Condition <b>${esc(k.name)}</b></span><span>Sources on <b>${act.length}/${r.srcs.length}</b></span><span>Type <b>${c.kind==='poi'?'Position of interest':'Compartment'}</b></span><span>Designer Noise all sources <b>${f1(c.xls)} dB(A)</b></span>${c.critName?`<span>Criteria set <b>${esc(c.critName)}</b></span>`:''}<span>Source file <b>${esc(P.file)}</b></span></div>
+  ${cm?cmpBlock(cA,bAlt,k,'h'):''}
+  <div class="tool">${wSeg()}<span>Overlay</span><span class="seg" data-seg="mode">${[...(cm?[['ab','A vs B']]:[]),['tot','Total'],['src','Sources'],['path','Paths'],...(elCalc(c,k).length?[['el','Elements']]:[])].map(([v,l])=>`<button class="${UI.mode===v?'on':''}" data-v="${v}">${l}</button>`).join('')}</span>${pathChips(c)}${yr()}<button class="btn sm" id="bImg">${IC.img}Report image</button></div>
+  <div class="grid2"><div class="card"><div class="fig"><canvas id="cv" tabindex="0"></canvas></div><div class="leg" id="leg"></div></div><div class="card curp" id="curp"></div></div>
+  ${cm?cmpBlock(cA,bAlt,k,'t'):''}
+  <div class="secttl"><h3>Source contributions${cm?' · '+esc(c.alt?mB():mA()):''}</h3><span class="note">Tick = source on in “${esc(k.name)}”. Offset (dB) applies to this source in every compartment of the condition (load, speed, number of units…).</span><button class="btn sm" data-copy="tSrc">Copy table</button></div>
+  <div class="tw"><table id="tSrc"><thead><tr><th>On</th><th class="t">Source</th>${ipaths(c).map(p=>`<th title="${PATHN[p]||p}">${p}</th>`).join('')}<th>Total dB(A)</th><th>Share</th><th class="barcell"></th><th>Offset dB</th><th>Rank</th></tr></thead><tbody>
+  ${r.srcs.map(x=>{const a=wsum(x.sp,'A'),sh=x.on&&A!=null&&a!=null?10**((a-A)/10)*100:null,ri=rank.findIndex(y=>y.s===x.s);
+    return`<tr class="${x.on?'':'offr'} rowlink" data-gos="${esc(x.s)}"><td><input type="checkbox" data-tog="${esc(x.s)}" ${x.on?'checked':''}></td><td class="t"><span class="sw" style="display:inline-block;background:${scol(x.s)}"></span> ${esc(x.s)}</td>${ipaths(c).map(p=>`<td>${f1(wsum(x.paths[p],'A'))}</td>`).join('')}<td><b>${f1(a)}</b></td><td>${sh==null?'–':sh.toFixed(1)+' %'}</td><td class="barcell"><div class="hb"><i style="width:${sh??0}%"></i></div></td><td><input class="num" data-off="${esc(x.s)}" value="${x.off||0}"></td><td>${x.on&&ri>=0?ri+1:''}</td></tr>`}).join('')}
+  <tr class="tot"><td></td><td class="t">Total (sources on)</td>${ipaths(c).map(p=>`<td>${f1(wsum(r.byP[p],'A'))}</td>`).join('')}<td>${f1(A)}</td><td>${A==null?'–':'100 %'}</td><td></td><td></td><td></td></tr></tbody></table></div>
+  ${elSection(c,k)}
+  <div class="secttl"><h3>Band table</h3><span class="note">${wu()} per octave band, sources on. Totals = energetic sum.</span><button class="btn sm" data-copy="tBand">Copy table</button></div>
+  <div class="tw"><table id="tBand"><thead><tr><th class="t">Source · ${wu()}</th>${P.bands.map((b,i)=>`<th class="${UI.cur===i?'hl':''}">${bl(b)}</th>`).join('')}<th>${wu()}</th></tr></thead><tbody>
+  ${rank.map(x=>`<tr><td class="t"><span class="sw" style="display:inline-block;background:${scol(x.s)}"></span> ${esc(x.s)}</td>${wsp(x.sp,UI.w).map((v,i)=>`<td class="${UI.cur===i?'hl':''}">${f1(v)}</td>`).join('')}<td><b>${f1(x.w)}</b></td></tr>`).join('')}
+  ${Object.keys(r.byP).map(p=>`<tr><td class="t" style="color:var(--mut)">Path ${p}</td>${wsp(r.byP[p],UI.w).map((v,i)=>`<td class="${UI.cur===i?'hl':''}" style="color:var(--mut)">${f1(v)}</td>`).join('')}<td style="color:var(--mut)">${f1(wsum(r.byP[p],UI.w))}</td></tr>`).join('')}
+  <tr class="tot"><td class="t">Total</td>${(wsp(r.tot,UI.w)||P.bands.map(()=>null)).map((v,i)=>`<td class="${UI.cur===i?'hl':''}">${f1(v)}</td>`).join('')}<td>${f1(wsum(r.tot,UI.w))}</td></tr>
+  <tr><td class="t" style="color:var(--mut)">${UI.w}-weighting (dB)</td>${P.bands.map(b=>`<td style="color:var(--mut)">${fsg(wt(b,UI.w))}</td>`).join('')}<td></td></tr></tbody></table></div>
+  <div class="secttl"><h3>This ${c.kind==='poi'?'position':'compartment'} in every condition</h3><span class="note">Click a row to make that condition active.</span></div>
+  <div class="tw"><table><thead><tr><th class="t">Condition</th><th>Sources on</th><th>dB(A)</th><th>Margin</th>${cm?`<th>${esc(c.alt?mA():mB())} dB(A)</th>`:''}<th class="t">Dominant source</th><th>Share</th></tr></thead><tbody>
+  ${P.conds.map(q=>{const v=compA(c,q),d=dominant(c,q),g=cA.crit!=null&&v!=null?cA.crit-v:null,vb2=cm?compA(c.alt?cA:bAlt,q):null;return`<tr class="rowlink" data-act="${q.id}"><td class="t ${q.id===k.id?'hl':''}"><b>${esc(q.name)}</b></td><td>${P.sources.filter(s=>isOn(q,s)&&c.src[s]).length}</td><td><b>${f1(v)}</b></td><td class="${g==null?'':g<0?'exc':'ok'}">${fsg(g)}</td>${cm?`<td>${f1(vb2)}</td>`:''}<td class="t">${d?esc(d.s):'–'}</td><td>${d&&d.sh!=null?d.sh.toFixed(0)+' %':'–'}</td></tr>`}).join('')}</tbody></table></div>`;
+  const cv=$('#cv');
+  const opts=()=>{const ws=wsp(r.tot,UI.w)||P.bands.map(()=>null);let lines=[];
+    if(UI.mode==='src')lines=rank.slice(0,10).map(x=>({name:x.s,color:scol(x.s),vals:wsp(x.sp,UI.w)}));
+    if(UI.mode==='ab'&&cm)return abOpts(cA,bAlt,k,nb);
+    if(UI.mode==='el')lines=elCalc(c,k).filter(z=>z.sp).map(z=>({z,a:wsum(z.sp,UI.w)})).sort((p,q)=>q.a-p.a).slice(0,10).map(({z},i)=>({name:elName(z.el),color:PAL[i%PAL.length],vals:wsp(z.sp,UI.w)}));
+    if(UI.mode==='path')lines=Object.keys(r.byP).map(p=>({name:p,color:PATHC[p]||'#888',vals:wsp(r.byP[p],UI.w)}));
+    const cu=UI.cur,lab=cu<nb?`${bl(P.bands[cu])} Hz  ${f1(ws[cu])} ${wu()}`:`dB(${'ACZ'[cu-nb]}) total  ${f1(wsum(r.tot,'ACZ'[cu-nb]))}`;
+    return{bands:P.bands,bars:ws,barC:UI.mode==='tot'?'#2f6296':'#c3d3e5',totC:'#2f6296',lines,totals:['A','C','Z'].map(w=>({label:w,v:wsum(r.tot,w),on:w===UI.w})),cur:cu,curLabel:lab,crit:UI.w==='A'?cA.crit:null,ymin:UI.ymin,ymax:UI.ymax,ylab:`L${UI.w==='Z'?'p':UI.w}eq [dB]`,xlab:'Octave band [Hz]'}};
+  const draw=()=>{const o=opts();drawChart(cv,o);$('#leg').innerHTML=o.lines.length?o.lines.map(l=>`<span class="chip"><span class="sw" style="background:${l.color}"></span>${esc(l.name)}</span>`).join('')+(UI.mode==='src'&&rank.length>10?`<span class="chip" style="cursor:default">+${rank.length-10} more in table</span>`:''):'<span style="color:var(--mut);font-size:12.5px">Bars: total of the sources on. Choose “Sources” or “Paths” to overlay contributions.</span>';curPanel()};
+  const curPanel=()=>{const cu=UI.cur;let h;
+    if(UI.mode==='ab'&&cm){$('#curp').innerHTML=abPanel(abOpts(cA,bAlt,k,nb),nb);return}
+    if(cu<nb){const tot=r.tot?.[cu],W=wt(P.bands[cu],UI.w),tv=tot==null?null:tot+W;
+      const ls=rank.map(x=>({s:x.s,v:x.sp[cu]==null?null:x.sp[cu]+W})).filter(z=>z.v!=null).sort((a,b)=>b.v-a.v);
+      h=`<h4>Cursor values</h4><div class="big">${bl(P.bands[cu])} Hz</div><div class="sm">octave band · ${wu()} · total ${f1(tv)}</div>
+      ${ls.map(z=>`<div class="kv"><span class="sw" style="background:${scol(z.s)}"></span><span class="k">${esc(z.s)}</span><span class="v">${f1(z.v)}</span><span class="p">${tv!=null?(10**((z.v-tv)/10)*100).toFixed(0)+'%':''}</span></div>`).join('')}<hr>
+      ${Object.keys(r.byP).map(p=>{const v=r.byP[p][cu];return`<div class="kv"><span class="sw" style="background:${PATHC[p]||'#888'}"></span><span class="k">${PATHN[p]||p}</span><span class="v">${f1(v==null?null:v+W)}</span></div>`}).join('')}`}
+    else{const w='ACZ'[cu-nb],tv=wsum(r.tot,w);
+      h=`<h4>Cursor values</h4><div class="big">dB(${w}) total</div><div class="sm">energetic sum of all bands · ${f1(tv)} dB(${w})</div>
+      ${rank.map(x=>({s:x.s,v:wsum(x.sp,w)})).sort((a,b)=>b.v-a.v).map(z=>`<div class="kv"><span class="sw" style="background:${scol(z.s)}"></span><span class="k">${esc(z.s)}</span><span class="v">${f1(z.v)}</span><span class="p">${tv!=null&&z.v!=null?(10**((z.v-tv)/10)*100).toFixed(0)+'%':''}</span></div>`).join('')}<hr>
+      ${Object.keys(r.byP).map(p=>`<div class="kv"><span class="sw" style="background:${PATHC[p]||'#888'}"></span><span class="k">${PATHN[p]||p}</span><span class="v">${f1(wsum(r.byP[p],w))}</span></div>`).join('')}`}
+    $('#curp').innerHTML=h+`<hr><div style="font-size:12px;color:var(--mut)">Click or drag on the chart, including the A/C/Z columns. With the chart focused, <kbd>←</kbd> <kbd>→</kbd> move the cursor.</div>`;
+    document.querySelectorAll('#tBand th,#tBand td').forEach(td=>{const i=td.cellIndex-1;td.classList.toggle('hl',i===cu&&cu<nb)})};
+  chartEvents(cv,draw,nb+3,()=>({...opts(),title:`${cname(c)} · ${k.name}`,leg:true}),`${cname(c)}_${k.name}`);
+}
+function vSrc(m,node,c,s){
+  const k=cond(),r=calc(c,k),x=r.srcs.find(z=>z.s===s);if(!x){UI.sel={t:'c',id:node.id};return render()}
+  const A=wsum(r.tot,'A'),a=wsum(x.sp,'A'),nb=P.bands.length;if(UI.cur==null||UI.cur>nb+2)UI.cur=nb+['A','C','Z'].indexOf(UI.w);
+  const ps=Object.keys(x.paths);
+  m.innerHTML=`<div class="crumb">${crumb(node.id,c)} \\ ${esc(cname(c))}</div>
+  <div class="head"><h2><span class="sw" style="display:inline-block;width:14px;height:14px;background:${scol(s)}"></span> ${esc(s)}</h2><div class="kpis">
+  <div class="kpi"><div class="l">Received in ${esc(cname(c))}</div><div class="v">${f1(a)}<span class="u">dB(A)</span></div></div>
+  <div class="kpi"><div class="l">Compartment total</div><div class="v s">${f1(A)}</div></div>
+  <div class="kpi"><div class="l">Share</div><div class="v s">${x.on&&A!=null&&a!=null?(10**((a-A)/10)*100).toFixed(1)+' %':'–'}</div></div></div></div>
+  <div class="meta"><span>Condition <b>${esc(k.name)}</b></span><span>Status <b class="${x.on?'good':'bad'}">${x.on?'ON':'OFF'}</b></span><span>Offset <b>${fsg(x.off||0)} dB</b></span><button class="btn sm" data-tog="${esc(s)}">${x.on?'Switch off':'Switch on'} in this condition</button><button class="btn sm" data-gocomp="${node.id}">← Back to compartment</button></div>
+  <div class="tool">${wSeg()}${pathChips(c)}${yr()}<button class="btn sm" id="bImg">${IC.img}Report image</button></div>
+  <div class="grid2"><div class="card"><div class="fig"><canvas id="cv" tabindex="0"></canvas></div><div class="leg">${ps.map(p=>`<span class="chip"><span class="sw" style="background:${PATHC[p]||'#888'}"></span>${PATHN[p]||p}</span>`).join('')}</div></div><div class="card curp" id="curp"></div></div>
+  <div class="secttl"><h3>Paths · ${wu()}</h3><button class="btn sm" data-copy="tP">Copy table</button></div>
+  <div class="tw"><table id="tP"><thead><tr><th class="t">Path</th>${P.bands.map(b=>`<th>${bl(b)}</th>`).join('')}<th>${wu()}</th></tr></thead><tbody>
+  ${ps.map(p=>`<tr><td class="t">${PATHN[p]||p} (${p})</td>${wsp(x.paths[p],UI.w).map(v=>`<td>${f1(v)}</td>`).join('')}<td><b>${f1(wsum(x.paths[p],UI.w))}</b></td></tr>`).join('')}
+  <tr class="tot"><td class="t">Source total</td>${(wsp(x.sp,UI.w)||P.bands.map(()=>null)).map(v=>`<td>${f1(v)}</td>`).join('')}<td>${f1(wsum(x.sp,UI.w))}</td></tr></tbody></table></div>
+  <div class="secttl"><h3>This source in every compartment</h3><span class="note">dB(A) received from ${esc(s)} (with the offset of “${esc(k.name)}”).</span></div>
+  <div class="tw"><table><thead><tr><th class="t">Compartment</th><th>dB(A)</th><th>Compartment total</th><th>Share</th></tr></thead><tbody>
+  ${compsIn(P.tree).map(({node:n,c:cc})=>{const rr=calc(cc,k),xx=rr.srcs.find(z=>z.s===s);if(!xx||!xx.sp)return'';const v=wsum(xx.sp,'A'),t=wsum(rr.tot,'A');return{n,cc,v,t}}).filter(Boolean).sort((p,q)=>(q.v??-1e9)-(p.v??-1e9)).map(o=>`<tr class="rowlink" data-gon="${o.n.id}" data-gs="${esc(s)}"><td class="t">${esc(cname(o.cc))}</td><td><b>${f1(o.v)}</b></td><td>${f1(o.t)}</td><td>${x.on&&o.t!=null&&o.v!=null?(10**((o.v-o.t)/10)*100).toFixed(0)+' %':'–'}</td></tr>`).join('')}</tbody></table></div>`;
+  const cv=$('#cv');
+  const opts=()=>{const ws=wsp(x.sp,UI.w)||P.bands.map(()=>null),cu=UI.cur;return{bands:P.bands,bars:ws,barC:'#c3d3e5',totC:'#2f6296',lines:ps.map(p=>({name:p,color:PATHC[p]||'#888',vals:wsp(x.paths[p],UI.w)})),totals:['A','C','Z'].map(w=>({label:w,v:wsum(x.sp,w),on:w===UI.w})),cur:cu,curLabel:cu<nb?`${bl(P.bands[cu])} Hz  ${f1(ws[cu])} ${wu()}`:`dB(${'ACZ'[cu-nb]}) ${f1(wsum(x.sp,'ACZ'[cu-nb]))}`,ymin:UI.ymin,ymax:UI.ymax,ylab:`L${UI.w==='Z'?'p':UI.w}eq [dB]`,xlab:'Octave band [Hz]'}};
+  const draw=()=>{drawChart(cv,opts());const cu=UI.cur;let h;
+    if(cu<nb){const W=wt(P.bands[cu],UI.w);h=`<h4>Cursor values</h4><div class="big">${bl(P.bands[cu])} Hz</div><div class="sm">${wu()}</div>${ps.map(p=>{const v=x.paths[p][cu];return`<div class="kv"><span class="sw" style="background:${PATHC[p]||'#888'}"></span><span class="k">${PATHN[p]||p}</span><span class="v">${f1(v==null?null:v+W)}</span></div>`}).join('')}<hr><div class="kv"><span class="k"><b>Source total</b></span><span class="v"><b>${f1(x.sp?.[cu]==null?null:x.sp[cu]+W)}</b></span></div>`}
+    else{const w='ACZ'[cu-nb];h=`<h4>Cursor values</h4><div class="big">dB(${w})</div><div class="sm">energetic sum of all bands</div>${ps.map(p=>`<div class="kv"><span class="sw" style="background:${PATHC[p]||'#888'}"></span><span class="k">${PATHN[p]||p}</span><span class="v">${f1(wsum(x.paths[p],w))}</span></div>`).join('')}<hr><div class="kv"><span class="k"><b>Source total</b></span><span class="v"><b>${f1(wsum(x.sp,w))}</b></span></div>`}
+    $('#curp').innerHTML=h};
+  chartEvents(cv,draw,nb+3,()=>({...opts(),title:`${s} → ${cname(c)} · ${k.name}`,leg:true}),`${cname(c)}_${s}`);
+}
+function chartEvents(cv,draw0,n,repOpts,fn){
+  const draw=()=>{if(cv.isConnected)draw0()};
+  let drag=false;const set=ev=>{const i=hit(ev,cv);if(i!=null&&i!==UI.cur){UI.cur=i;draw()}};
+  cv.onmousedown=e=>{drag=true;set(e);cv.focus()};cv.onmousemove=e=>{if(drag)set(e)};window.onmouseup=()=>drag=false;
+  cv.onkeydown=e=>{if(e.key==='ArrowRight'){UI.cur=Math.min(n-1,UI.cur+1);draw();e.preventDefault()}if(e.key==='ArrowLeft'){UI.cur=Math.max(0,UI.cur-1);draw();e.preventDefault()}};
+  new ResizeObserver(draw).observe(cv);draw();
+  const b=$('#bImg');if(b)b.onclick=()=>{const c=document.createElement('canvas'),W=1600,H=900;c.width=W;c.height=H;const x=c.getContext('2d');x.scale(2,2);paint(x,W/2,H/2,repOpts());const g=G;draw();G=G||g;
+    c.toBlob(bb=>dl(bb,fn.replace(/[^\w.-]+/g,'_')+'.png'))};
+}
+function overviewTable(list,k,editCrit=true){
+  const mx=Math.max(...list.map(({c})=>compA(mv(c),k)??0),1),mn=0;
+  return`<div class="tw"><table id="tOv"><thead><tr><th class="t">Compartment</th><th>Criteria</th>${P.conds.map(q=>`<th class="${q.id===k.id?'hl':''}" title="${esc(q.notes||'')}">${esc(q.name)}</th>`).join('')}<th>Margin</th><th class="t">Dominant source · ${esc(k.name)}</th><th>Share</th><th class="barcell">${esc(k.name)}</th></tr></thead><tbody>
+  ${list.map(({node,c})=>{const v=compA(mv(c),k),g=c.crit!=null&&v!=null?c.crit-v:null,d=dominant(mv(c),k);
+   return`<tr class="rowlink" data-gon="${node.id}"><td class="t" title="${esc(c.name)}">${c.kind==='poi'?'◎ ':''}${esc(cname(c))}</td><td>${editCrit?`<input class="num" data-crit="${c.id}" value="${c.crit??''}" placeholder="–">`:f1(c.crit)}</td>
+   ${P.conds.map(q=>{const w=compA(mv(c),q),ex=c.crit!=null&&w!=null&&w>c.crit;return`<td class="${q.id===k.id?'hl':''} ${ex?'exc':''}">${f1(w)}</td>`}).join('')}
+   <td class="${g==null?'':g<0?'exc':'ok'}">${fsg(g)}</td><td class="t">${d?`<span class="sw" style="display:inline-block;background:${scol(d.s)}"></span> ${esc(d.s)}`:'–'}</td><td>${d&&d.sh!=null?d.sh.toFixed(0)+' %':'–'}</td>
+   <td class="barcell"><div class="hb"><i style="width:${v==null?0:Math.max(0,(v-mn)/(mx-mn)*100)}%"></i>${c.crit!=null?`<b style="left:${Math.min(100,(c.crit-mn)/(mx-mn)*100)}%"></b>`:''}</div></td></tr>`}).join('')}</tbody></table></div>`;
+}
+function vFolder(m,f){
+  const k=cond(),list=compsIn(f),vs=list.map(({c})=>({c,v:compA(mv(c),k)}));
+  const nx=vs.filter(o=>o.c.crit!=null&&o.v!=null&&o.v>o.c.crit).length,ncr=vs.filter(o=>o.c.crit!=null).length,top=vs.filter(o=>o.v!=null).sort((a,b)=>b.v-a.v)[0];
+  m.innerHTML=`<div class="crumb">${crumb(f.id)}</div>
+  <div class="head"><h2>${esc(f.name)}</h2><div class="kpis"><div class="kpi"><div class="l">Items</div><div class="v s">${list.length}</div></div>
+  ${cmpOn()?'':`<div class="kpi"><div class="l">Over criteria · ${esc(k.name)}</div><div class="v s ${nx?'bad':'good'}">${ncr?nx+' / '+ncr:'no criteria'}</div></div>`}
+  ${cmpOn()?cmpKpiHtml(list,k):`<div class="kpi"><div class="l">Highest</div><div class="v s">${top?f1(top.v):'–'}<span class="u">${top?esc(cname(top.c)):''}</span></div></div>`}</div></div>
+  <div class="meta"><span>Active condition <b>${esc(k.name)}</b></span><span>Sources on <b>${P.sources.filter(s=>isOn(k,s)).length}/${P.sources.length}</b></span><span>Paths <b>${P.paths.filter(p=>UI.pf[p]!==false).join(' + ')}</b></span><span>Levels in <b>dB(A)</b></span></div>
+  <div class="tool">${pathChips()}<span style="flex:1"></span><button class="btn sm" id="bCrit">Set criteria for all…</button><button class="btn sm" data-copy="${cmpOn()?'tCmp':'tOv'}">Copy table</button></div>
+  ${list.length?(cmpOn()?cmpTable(list,k):overviewTable(list,k)):'<p style="color:var(--mut)">Empty folder – drag compartments here.</p>'}`;
+  $('#bCrit').onclick=()=>{const v=prompt(`Criteria dB(A) for the ${list.length} items of “${f.name}” (empty = none):`,'');if(v===null)return;const n=v.trim()===''?null:num(v);commit(()=>list.forEach(({c})=>c.crit=n))};
+}
+function vCond(m,k){
+  const list=compsIn(P.tree);
+  const st=P.sources.map(s=>{let dom=0,mx=null;for(const{c:c0}of list){const c=mv(c0);if(!c.src[s])continue;const d=dominant(c,k);if(d&&d.s===s)dom++;const x=calc(c,k).srcs.find(z=>z.s===s);const v=x?wsum(x.sp,'A'):null;if(v!=null&&(mx==null||v>mx.v))mx={v,c}}return{s,dom,mx}});
+  m.innerHTML=`<div class="crumb">NAVIGATION CONDITIONS \\ ${k.id===P.active?'active':'not active'} ${mTag()}</div>
+  <div class="condhead"><input class="cn" id="cn" value="${esc(k.name)}"></div>
+  <textarea class="notes" id="cnotes" placeholder="Description: speed, propulsion mode, generators running, load…">${esc(k.notes||'')}</textarea>
+  <div class="tool" style="margin-top:10px">${k.id!==P.active?`<button class="btn sm pri" data-act="${k.id}">Make active</button>`:'<span class="pill">active condition</span>'}
+  <button class="btn sm" id="cAll">All on</button><button class="btn sm" id="cNone">All off</button><button class="btn sm" id="cInv">Invert</button><button class="btn sm" id="cZero">Reset offsets</button>
+  <span style="flex:1"></span><button class="btn sm" id="cDup">Duplicate</button><button class="btn sm" id="cDel" ${P.conds.length<2?'disabled':''}>Delete</button></div>
+  <div class="secttl"><h3>Sources</h3><span class="note">Offset in dB applied to the source in all compartments (e.g. −6 dB propeller at reduced speed, +3 dB two identical units).</span><button class="btn sm" data-copy="tCs">Copy table</button></div>
+  <div class="tw"><table id="tCs"><thead><tr><th>On</th><th class="t">Source</th><th>Offset dB</th><th>Dominant in</th><th>Max received dB(A)</th><th class="t">in</th></tr></thead><tbody>
+  ${st.map(o=>`<tr class="${isOn(k,o.s)?'':'offr'}"><td><input type="checkbox" data-ctog="${esc(o.s)}" ${isOn(k,o.s)?'checked':''}></td><td class="t"><span class="sw" style="display:inline-block;background:${scol(o.s)}"></span> ${esc(o.s)}</td><td><input class="num" data-coff="${esc(o.s)}" value="${k.off[o.s]||0}"></td><td>${o.dom||''}</td><td>${o.mx?f1(o.mx.v):'–'}</td><td class="t">${o.mx?esc(cname(o.mx.c)):''}</td></tr>`).join('')}</tbody></table></div>
+  <div class="secttl"><h3>All compartments</h3><span class="note">dB(A) in every condition; highlighted column = this condition. Click a row to open it.</span><button class="btn sm" data-copy="${cmpOn()?'tCmp':'tOv'}">Copy table</button></div>
+  ${cmpOn()?cmpTable(list,k):overviewTable(list,k)}`;
+  $('#cn').onchange=e=>commit(()=>k.name=e.target.value.trim()||k.name);
+  $('#cnotes').onchange=e=>commit(()=>k.notes=e.target.value);
+  $('#cAll').onclick=()=>commit(()=>k.on={});
+  $('#cNone').onclick=()=>commit(()=>P.sources.forEach(s=>k.on[s]=false));
+  $('#cInv').onclick=()=>commit(()=>P.sources.forEach(s=>k.on[s]=!isOn(k,s)));
+  $('#cZero').onclick=()=>commit(()=>k.off={});
+  $('#cDup').onclick=()=>dupCond(k);$('#cDel').onclick=()=>delCond(k);
+}
+function dupCond(k){commit(()=>{const n={...JSON.parse(JSON.stringify(k)),id:uid('k'),name:k.name+' (copy)'};P.conds.splice(P.conds.indexOf(k)+1,0,n);P.active=n.id;UI.sel={t:'cond',id:n.id}})}
+function delCond(k){if(P.conds.length<2)return;if(!confirm(`Delete condition “${k.name}”?`))return;commit(()=>{P.conds=P.conds.filter(c=>c!==k);if(P.active===k.id)P.active=P.conds[0].id;if(UI.sel?.t==='cond')UI.sel={t:'cond',id:P.active}})}
+function newCond(){commit(()=>{const n={id:uid('k'),name:'Condition '+(P.conds.length+1),notes:'',on:{},off:{}};P.sources.forEach(s=>n.on[s]=false);P.conds.push(n);P.active=n.id;UI.sel={t:'cond',id:n.id}});toast('New condition with all sources off – tick the sources that run')}
+
+/* ---------- element (panel) data: Element Noise, Element La, Element Radiation, TL, Damping, Coupling ---------- */
+const srcName=s=>str(s).replace(/^source\s*\d+\s*:\s*/i,'');
+const r2=v=>v==null?null:Math.round(v*100)/100;
+function bandCols(h,j0,bands){const c=[];let j=j0;while(j<h.length&&num(h[j])!=null){c.push(j);j++}return c.length===bands.length&&c.every((k,i)=>Math.abs(num(h[k])-bands[i])<1e-6)?c:null}
+function startsOf(h,key){const b=[];h.forEach((v,j)=>{if(str(v).toLowerCase()===key)b.push(j)});return b}
+function titleAbove(aoa,h,j){for(let i=h-1;i>=0;i--){const t=str(aoa[i]&&aoa[i][j]);if(t)return t.toLowerCase()}return''}
+const pathKind=t=>/total/.test(t)?'Tot':/first/.test(t)?'SB':/secondary/.test(t)?'SSB':'Tot';
+function parseEN(aoa,bands){
+  const h=aoa.findIndex(r=>r&&str(r[0]).toLowerCase()==='compartment'&&str(r[2]).toLowerCase()==='element');if(h<0)return null;
+  const hd=aoa[h],out={};
+  for(const j of startsOf(hd,'compartment')){const k=pathKind(titleAbove(aoa,h,j)),cols=bandCols(hd,j+3,bands);if(k==='Tot'||!cols)continue;
+    let comp=null,src=null;
+    for(let i=h+1;i<aoa.length;i++){const r=aoa[i]||[],c0=str(r[j]),c1=str(r[j+1]),el=num(r[j+2]);
+      if(c0)comp=c0;if(c1)src=srcName(c1);if(!comp||!src||el==null||src.toLowerCase()==='all sources')continue;
+      const S=(out[comp]=out[comp]||{}),E=(S[src]=S[src]||{});(E[el]=E[el]||{})[k]=cols.map(c=>r2(num(r[c])))}}
+  return out;
+}
+function parseLA(aoa,bands){
+  const h=aoa.findIndex(r=>r&&str(r[0]).toLowerCase()==='element');if(h<0)return null;
+  const hd=aoa[h],bl=startsOf(hd,'element').map(j=>({j,k:pathKind(titleAbove(aoa,h-1,j)),cols:bandCols(hd,j+1,bands)})).filter(b=>b.cols&&b.k!=='Tot');
+  const out={};let src=null;
+  for(let i=Math.max(0,h-1);i<aoa.length;i++){const r=aoa[i]||[];
+    if(num(r[0])==null){const t=str(r[0]);if(t&&t.toLowerCase()!=='element')src=srcName(t);continue}
+    if(!src||src.toLowerCase()==='all sources')continue;
+    for(const b of bl){const el=num(r[b.j]);if(el==null)continue;const S=(out[src]=out[src]||{});(S[el]=S[el]||{})[b.k]=b.cols.map(c=>r2(num(r[c])))}}
+  return out;
+}
+function parseRAD(aoa,bands){
+  const h=aoa.findIndex(r=>r&&str(r[0]).toLowerCase()==='compartment'&&str(r[1]).toLowerCase()==='element');if(h<0)return null;
+  const hd=aoa[h],out={};
+  for(const j of startsOf(hd,'compartment')){const t=titleAbove(aoa,h,j),k=/absorp/.test(t)?'abs':/joiner/.test(t)?'join':'sig',cols=bandCols(hd,j+2,bands);if(!cols)continue;
+    let comp=null;for(let i=h+1;i<aoa.length;i++){const r=aoa[i]||[],c0=str(r[j]),el=num(r[j+1]);if(c0)comp=c0;if(!comp||el==null)continue;
+      const C=(out[comp]=out[comp]||{});(C[el]=C[el]||{})[k]=cols.map(c=>r2(num(r[c])))}}
+  return out;
+}
+function parseTL(aoa,bands){const h=aoa.findIndex(r=>r&&str(r[0]).toLowerCase()==='element');if(h<0)return null;const cols=bandCols(aoa[h],1,bands);if(!cols)return null;const out={};
+  for(let i=h+1;i<aoa.length;i++){const r=aoa[i]||[],el=num(r[0]);if(el!=null)out[el]=cols.map(c=>r2(num(r[c])))}return out}
+function parseDLF(aoa,bands){const h=aoa.findIndex(r=>r&&str(r[0]).toLowerCase()==='element');if(h<0)return null;const hd=aoa[h],out={};
+  for(const j of startsOf(hd,'element')){const t=titleAbove(aoa,h,j),k=/1/.test(t)?'j1':/2/.test(t)?'j2':'hull',cols=bandCols(hd,j+1,bands);if(!cols)continue;
+    for(let i=h+1;i<aoa.length;i++){const r=aoa[i]||[],el=num(r[j]);if(el!=null)(out[el]=out[el]||{})[k]=cols.map(c=>num(r[c]))}}return out}
+function parseCLF(aoa){const h=aoa.findIndex(r=>r&&str(r[0]).toLowerCase()==='number');if(h<0)return null;const out=[];
+  for(let i=h+1;i<aoa.length;i++){const r=aoa[i]||[],a=[0,1,2,3].map(k=>num(r[k]));if(a[2]!=null&&a[3]!=null)out.push(a)}return out}
+function parseElements(get,bands){
+  const X={},tr=(k,n,f)=>{try{const a=get(n);if(a){const v=f(a,bands);if(v)X[k]=v}}catch(e){console.warn(n,e)}};
+  tr('EN','element noise',parseEN);tr('LA','element la',parseLA);tr('RAD','element radiation',parseRAD);tr('TL','tl',parseTL);tr('DLF','damping loss',parseDLF);tr('CLF','coupling loss',parseCLF);
+  return X;
+}
+function buildEl(X,comps){
+  if(!X||!Object.keys(X).length)return null;
+  const id={};Object.values(comps).forEach(c=>{if(c.kind==='comp')id[c.name]=c.id});
+  const el={EN:{},RAD:{},LA:X.LA||{},TL:X.TL||{},DLF:X.DLF||{},CLF:X.CLF||[],list:{},where:{}};
+  for(const n in X.EN||{})if(id[n])el.EN[id[n]]=X.EN[n];
+  for(const n in X.RAD||{})if(id[n])el.RAD[id[n]]=X.RAD[n];
+  for(const cid of new Set([...Object.keys(el.EN),...Object.keys(el.RAD)])){const s=new Set(Object.keys(el.RAD[cid]||{}));Object.values(el.EN[cid]||{}).forEach(o=>Object.keys(o).forEach(e=>s.add(e)));
+    el.list[cid]=[...s].map(Number).sort((a,b)=>a-b);el.list[cid].forEach(e=>(el.where[e]=el.where[e]||[]).push(cid))}
+  const cnt={};Object.values(el.DLF).forEach(d=>{if(d.hull){const k=JSON.stringify(d.hull);cnt[k]=(cnt[k]||0)+1}});
+  const typ=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];el.dTyp=typ?JSON.parse(typ[0]):null;
+  return el;
+}
+const elName=e=>P.elAlias&&P.elAlias[e]?`El ${e} · ${P.elAlias[e]}`:`El ${e}`;
+const zero=()=>new Array(P.bands.length).fill(0);
+const toDB=E=>E.some(x=>x>0)?E.map(dB):null;
+function elCalc(c,k=cond()){
+  const key='E'+c.id+'|'+k.id;if(k.id&&memo.has(key))return memo.get(key);
+  const EM=elOf(c),list=EM?.list?.[c.id]||[],EN=EM?.EN?.[c.id]||{},R={};
+  list.forEach(e=>R[e]={E:zero(),SB:zero(),SSB:zero(),bySrc:{}});
+  for(const s in EN){const on=isOn(k,s),off=+(k.off[s]||0);
+    for(const e in EN[s]){const o=EN[s][e],T=R[e]||(R[e]={E:zero(),SB:zero(),SSB:zero(),bySrc:{}}),Es=zero(),Ps={};
+      for(const p of['SB','SSB']){if(!o[p]||UI.pf[p]===false)continue;const pe=zero();o[p].forEach((v,i)=>{if(v!=null){const x=10**((v+off)/10);pe[i]+=x;Es[i]+=x;if(on)T[p][i]+=x}});Ps[p]=toDB(pe)}
+      T.bySrc[s]={on,sp:toDB(Es),paths:Ps};if(on)Es.forEach((x,i)=>T.E[i]+=x)}}
+  const out=Object.entries(R).map(([e,T])=>({el:+e,sp:toDB(T.E),SB:toDB(T.SB),SSB:toDB(T.SSB),bySrc:T.bySrc}));
+  if(k.id)memo.set(key,out);return out;
+}
+function laCalc(e,k=cond(),EM=P.el){
+  const key='L'+(EM===P.el?'A':'B')+e+'|'+k.id;if(k.id&&memo.has(key))return memo.get(key);
+  const T={E:zero(),SB:zero(),SSB:zero()},bySrc={};
+  for(const s in EM?.LA||{}){const o=EM.LA[s][e];if(!o)continue;const on=isOn(k,s),off=+(k.off[s]||0),Es=zero(),Ps={};
+    for(const p of['SB','SSB']){if(!o[p]||UI.pf[p]===false)continue;const pe=zero();o[p].forEach((v,i)=>{if(v!=null){const x=10**((v+off)/10);pe[i]+=x;Es[i]+=x;if(on)T[p][i]+=x}});Ps[p]=toDB(pe)}
+    bySrc[s]={on,sp:toDB(Es),paths:Ps};if(on)Es.forEach((x,i)=>T.E[i]+=x)}
+  const r={sp:toDB(T.E),SB:toDB(T.SB),SSB:toDB(T.SSB),bySrc};if(k.id)memo.set(key,r);return r;
+}
+const G0=9.80665e-6;
+function laU(L,f){if(L==null)return null;if(UI.lu==='dB')return L;const a=G0*10**(L/20)*1000;return UI.lu==='a'?a:a/(2*Math.PI*f)}
+function laTot(sp){if(!sp)return null;if(UI.lu==='dB')return dB(sp.reduce((s,L)=>s+(L==null?0:10**(L/10)),0));let q=0;sp.forEach((L,i)=>{const v=laU(L,P.bands[i]);if(v!=null)q+=v*v});return q>0?Math.sqrt(q):null}
+const luN=()=>({dB:'dB re 1 µg',a:'mm/s² rms',v:'mm/s rms'})[UI.lu];
+const fu=v=>UI.lu==='dB'?f1(v):v==null||!isFinite(v)?'–':v<0.01?v.toExponential(2):v<1?v.toFixed(3):v<100?v.toFixed(2):v.toFixed(0);
+const laSp=sp=>sp?sp.map((L,i)=>laU(L,P.bands[i])):P.bands.map(()=>null);
+const mx=a=>a?Math.max(0,...a.map(v=>v??0)):0;
+function treat(cid,e,EM=P.el){const R=EM?.RAD?.[cid]?.[e]||{},d=EM?.DLF?.[e],t=EM?.dTyp;
+  return{ab:mx(R.abs),jo:mx(R.join),jp:!!d&&(mx(d.j1)>0||mx(d.j2)>0),hd:!!(d&&t&&d.hull&&d.hull.some((v,i)=>v!=null&&t[i]!=null&&v>t[i]*1.2)),tl:!!EM?.TL?.[e]}}
+function treatHtml(t){const a=[];if(t.ab)a.push(`<span class="pill tg-a" title="Effect of absorption on radiation efficiency (max)">Absorption ${t.ab.toFixed(0)} dB</span>`);
+  if(t.jo)a.push(`<span class="pill tg-j" title="Effect of joiner panel on radiation efficiency (max)">Joiner ${t.jo.toFixed(0)} dB</span>`);
+  if(t.jp)a.push('<span class="pill tg-j" title="Joiner panel damping loss factor defined">Joiner panel η</span>');
+  if(t.hd)a.push('<span class="pill tg-d" title="Hull/layer damping loss factor above the most common value in the model">Damping ↑</span>');
+  return a.join(' ')||'<span style="color:var(--mut)">bare</span>'}
+const treated=t=>t.ab>0||t.jo>0||t.jp||t.hd;
+function nodeOf(cid){if(P.alt&&P.alt.rmap&&P.alt.rmap[cid])cid=P.alt.rmap[cid];const x=compsIn(P.tree).find(o=>o.c.id===cid);return x?x.node:null}
+function elSection(c,k){
+  const L=elCalc(c,k);if(!L.length)return'';const EM=elOf(c);
+  const T=zero();L.forEach(x=>x.sp&&x.sp.forEach((v,i)=>{if(v!=null)T[i]+=10**(v/10)}));const At=wsum(toDB(T),'A');
+  const rows=L.map(x=>{let best=null,bv=-1e9;for(const s in x.bySrc){const o=x.bySrc[s];if(!o.on)continue;const v=wsum(o.sp,'A');if(v!=null&&v>bv){bv=v;best=s}}
+    const a=wsum(x.sp,'A');return{...x,a,dom:best,dsh:a!=null&&best?10**((bv-a)/10)*100:null,t:treat(c.id,x.el,EM)}}).sort((p,q)=>(q.a??-1e9)-(p.a??-1e9));
+  const node=nodeOf(c.id);
+  return`<div class="secttl"><h3>Radiating elements (panels)${c.alt?' · '+esc(mB()):cmpOn()?' · '+esc(mA()):''}</h3><span class="note">Structure-borne noise radiated by each boundary element into this compartment (Element Noise), with the sources on in “${esc(k.name)}”. Sum of elements = SB + SSB of the compartment; airborne (AB) is not included. Acceleration from Element La.</span><button class="btn sm" data-copy="tEl">Copy table</button></div>
+  <div class="tw"><table id="tEl"><thead><tr><th class="t">Element</th><th>FSB dB(A)</th><th>SSB dB(A)</th><th>Radiated dB(A)</th><th>Share</th><th class="barcell"></th><th class="t">Dominant source</th><th>La Σ dB re 1 µg</th><th class="t">Treatment</th><th class="t">Also radiates into</th></tr></thead><tbody>
+  ${rows.map(x=>{const sh=At!=null&&x.a!=null?10**((x.a-At)/10)*100:null,la=laCalc(x.el,k,EM);
+    return`<tr class="rowlink" data-gon="${node?.id||''}" data-ge="${x.el}"><td class="t"><b>${esc(elName(x.el))}</b></td><td>${f1(wsum(x.SB,'A'))}</td><td>${f1(wsum(x.SSB,'A'))}</td><td><b>${f1(x.a)}</b></td><td>${sh==null?'–':sh.toFixed(1)+' %'}</td><td class="barcell"><div class="hb"><i style="width:${sh??0}%"></i></div></td>
+    <td class="t">${x.dom?`<span class="sw" style="display:inline-block;background:${scol(x.dom)}"></span> ${esc(x.dom)} <span style="color:var(--mut)">${x.dsh!=null?x.dsh.toFixed(0)+'%':''}</span>`:'–'}</td><td>${f1(la.sp?dB(la.sp.reduce((s,L)=>s+(L==null?0:10**(L/10)),0)):null)}</td><td class="t">${treatHtml(x.t)}</td>
+    <td class="t">${(EM.where[x.el]||[]).filter(i=>i!==c.id).map(i=>esc(cname(compById(i)))).join(', ')||'–'}</td></tr>`}).join('')}
+  <tr class="tot"><td class="t">All elements (SB + SSB)</td><td>${f1(wsum(c3(L,'SB'),'A'))}</td><td>${f1(wsum(c3(L,'SSB'),'A'))}</td><td>${f1(At)}</td><td>${At==null?'–':'100 %'}</td><td></td><td></td><td></td><td class="t">${rows.filter(x=>treated(x.t)).length} of ${rows.length} treated</td><td></td></tr></tbody></table></div>`;
+}
+function c3(L,p){const T=zero();L.forEach(x=>x[p]&&x[p].forEach((v,i)=>{if(v!=null)T[i]+=10**(v/10)}));return toDB(T)}
+
+function vElem(m,node,c0,e){
+  const bA=altOf(c0),c=showB()&&bA?bA:c0,EM=elOf(c);
+  const k=cond(),L=elCalc(c,k),x=L.find(z=>z.el===e);if(!x){m.innerHTML=`<div class="crumb">${crumb(node.id)}</div><h2>Element ${e}</h2><p>This element does not radiate into ${esc(cname(c))} in model ${esc(c.alt?mB():mA())}.</p><button class="btn sm" data-gocomp="${node.id}">← Back to compartment</button>${cmpOn()?`<span class="seg" data-seg="det" style="margin-left:10px">${[['A',mA()],['B',mB()]].map(([v,l])=>`<button class="${(UI.det||'A')===v?'on':''}" data-v="${v}">${esc(l)}</button>`).join('')}</span>`:''}`;return}
+  const nb=P.bands.length,la=laCalc(e,k,EM),t=treat(c.id,e,EM),R=EM.RAD?.[c.id]?.[e]||{},mode=UI.emode;
+  const T=zero();L.forEach(z=>z.sp&&z.sp.forEach((v,i)=>{if(v!=null)T[i]+=10**(v/10)}));const At=wsum(toDB(T),'A'),A=wsum(x.sp,'A');
+  const nt=mode==='rad'?3:mode==='acc'?1:0;
+  if(UI.cur==null||UI.cur>=nb+nt)UI.cur=nt?nb+(mode==='rad'?Math.max(0,'ACZ'.indexOf(UI.w)):0):Math.max(0,P.bands.indexOf(1000));
+  const srcs=Object.entries(x.bySrc).map(([s,o])=>({s,...o,a:wsum(o.sp,'A'),la:la.bySrc[s]})).sort((p,q)=>(q.on-p.on)||((q.a??-1e9)-(p.a??-1e9)));
+  const laOv=laTot(la.sp);
+  const segE=`<span>Chart</span><span class="seg" data-seg="emode">${[['rad','Radiated noise'],['acc','Acceleration'],['sig','Radiation efficiency']].map(([v,l])=>`<button class="${mode===v?'on':''}" data-v="${v}">${l}</button>`).join('')}</span>`;
+  const segO=mode==='sig'?'':`<span>Overlay</span><span class="seg" data-seg="eov">${[['src','Sources'],['path','FSB / SSB']].map(([v,l])=>`<button class="${UI.eov===v?'on':''}" data-v="${v}">${l}</button>`).join('')}</span>`;
+  const segU=mode==='acc'?`<span>Units</span><span class="seg" data-seg="lu">${[['dB','dB re 1µg'],['a','a mm/s²'],['v','v mm/s']].map(([v,l])=>`<button class="${UI.lu===v?'on':''}" data-v="${v}">${l}</button>`).join('')}</span>`:'';
+  const where=(EM.where[e]||[]);
+  const conns=(EM.CLF||[]).filter(r=>r[2]===e||r[3]===e).map(r=>({n:r[0],clf:r[1],o:r[2]===e?r[3]:r[2]}));
+  const prop=[['Hull & layer radiation efficiency σ (dB)',R.sig],['Effect of absorption on σ (dB)',R.abs],['Effect of joiner panel on σ (dB)',R.join],['Transmission loss TL (dB)',EM.TL?.[e]],['Damping η hull & layer',EM.DLF?.[e]?.hull],['Damping η joiner panel 1',EM.DLF?.[e]?.j1],['Damping η joiner panel 2',EM.DLF?.[e]?.j2],['η most common in model (reference)',EM.dTyp]].filter(r=>r[1]);
+  const fp=v=>v==null?'–':Math.abs(v)<0.1&&v!==0?v.toPrecision(2):v.toFixed(Number.isInteger(v)?0:2);
+  m.innerHTML=`<div class="crumb">${crumb(node.id,c)} \\ ${esc(cname(c))} \\ elements</div>
+  <div class="head"><h2>Element ${e} <input id="ealias" class="yr" value="${esc(P.elAlias?.[e]||'')}" placeholder="name (e.g. Deck Fr 10–20)" style="width:230px;height:32px;font-size:15px;vertical-align:middle"></h2><div class="kpis">
+   <div class="kpi"><div class="l">Radiated into ${esc(cname(c))}</div><div class="v">${f1(A)}<span class="u">dB(A)</span></div></div>
+   <div class="kpi"><div class="l">Share of SB+SSB</div><div class="v s">${At!=null&&A!=null?(10**((A-At)/10)*100).toFixed(1)+' %':'–'}</div></div>
+   <div class="kpi"><div class="l">Acceleration Σ</div><div class="v s">${fu(laOv)}<span class="u">${luN()}</span></div></div></div></div>
+  <div class="meta"><span>Condition <b>${esc(k.name)}</b></span><span>Treatment ${treatHtml(t)}</span><span>Radiates into <b>${where.map(i=>esc(cname(compById(i)))).join(', ')||'–'}</b></span><button class="btn sm" data-gocomp="${node.id}">← Back to compartment</button></div>
+  ${cmpOn()&&bA?elCmpStrip(c0,bA,e,k):''}<div class="tool">${segE}${mode==='rad'?wSeg():''}${segO}${segU}${mode!=='sig'?pathChips(c):''}${yr()}<button class="btn sm" id="bImg">${IC.img}Report image</button></div>
+  <div class="grid2"><div class="card"><div class="fig"><canvas id="cv" tabindex="0"></canvas></div><div class="leg" id="leg"></div></div><div class="card curp" id="curp"></div></div>
+  <div class="secttl"><h3>Sources through this element</h3><span class="note">Radiated into ${esc(cname(c))} (dB(A)) and acceleration of the element (${luN()}, overall). Ticks switch the source in “${esc(k.name)}”.</span><button class="btn sm" data-copy="tES">Copy table</button></div>
+  <div class="tw"><table id="tES"><thead><tr><th>On</th><th class="t">Source</th><th>FSB dB(A)</th><th>SSB dB(A)</th><th>Radiated dB(A)</th><th>Share</th><th class="barcell"></th><th>La FSB</th><th>La SSB</th><th>La Σ</th></tr></thead><tbody>
+  ${srcs.map(o=>{const sh=o.on&&A!=null&&o.a!=null?10**((o.a-A)/10)*100:null;return`<tr class="${o.on?'':'offr'}"><td><input type="checkbox" data-tog="${esc(o.s)}" ${o.on?'checked':''}></td><td class="t"><span class="sw" style="display:inline-block;background:${scol(o.s)}"></span> ${esc(o.s)}</td><td>${f1(wsum(o.paths.SB,'A'))}</td><td>${f1(wsum(o.paths.SSB,'A'))}</td><td><b>${f1(o.a)}</b></td><td>${sh==null?'–':sh.toFixed(1)+' %'}</td><td class="barcell"><div class="hb"><i style="width:${sh??0}%"></i></div></td><td>${fu(laTot(o.la?.paths?.SB))}</td><td>${fu(laTot(o.la?.paths?.SSB))}</td><td><b>${fu(laTot(o.la?.sp))}</b></td></tr>`}).join('')}
+  <tr class="tot"><td></td><td class="t">Total (sources on)</td><td>${f1(wsum(x.SB,'A'))}</td><td>${f1(wsum(x.SSB,'A'))}</td><td>${f1(A)}</td><td></td><td></td><td>${fu(laTot(la.SB))}</td><td>${fu(laTot(la.SSB))}</td><td>${fu(laOv)}</td></tr></tbody></table></div>
+  <div class="secttl"><h3>Band table · ${mode==='rad'?'radiated '+wu():mode==='acc'?'acceleration '+luN():'radiation efficiency'}</h3><button class="btn sm" data-copy="tEB">Copy table</button></div>
+  <div class="tw"><table id="tEB"><thead><tr><th class="t"></th>${P.bands.map((b,i)=>`<th class="${UI.cur===i?'hl':''}">${bl(b)}</th>`).join('')}<th>${mode==='rad'?wu():mode==='acc'?'Σ':''}</th></tr></thead><tbody id="tEBb"></tbody></table></div>
+  <div class="secttl"><h3>Element properties</h3><span class="note">From Element Radiation (for this compartment), TL and Damping Loss sheets. Absorption or joiner effect &gt; 0 means the panel is treated on this side.</span><button class="btn sm" data-copy="tEP">Copy table</button></div>
+  <div class="tw"><table id="tEP"><thead><tr><th class="t">Property</th>${P.bands.map(b=>`<th>${bl(b)}</th>`).join('')}</tr></thead><tbody>
+  ${prop.map(([n,a])=>`<tr><td class="t">${n}</td>${a.map(v=>`<td>${fp(v)}</td>`).join('')}</tr>`).join('')||`<tr><td class="t" colspan="${nb+1}">No property data for this element.</td></tr>`}</tbody></table></div>
+  <div class="grid2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <div><div class="secttl"><h3>Radiates into</h3></div><div class="tw"><table><thead><tr><th class="t">Compartment</th><th>dB(A) from this element</th><th>Compartment total</th><th class="t">Treatment on that side</th></tr></thead><tbody>
+  ${where.map(i=>{const cc=compById(i),n=nodeOf(i),xx=elCalc(cc,k).find(z=>z.el===e);return`<tr class="${n?'rowlink':''}" data-gon="${n?.id||''}" data-ge="${e}"><td class="t ${i===c.id?'hl':''}">${esc(cname(cc))}</td><td><b>${f1(wsum(xx?.sp,'A'))}</b></td><td>${f1(compA(cc,k))}</td><td class="t">${treatHtml(treat(i,e,EM))}</td></tr>`}).join('')}</tbody></table></div></div>
+  <div><div class="secttl"><h3>Connected elements</h3><span class="note">Coupling Loss sheet</span></div><div class="tw" style="max-height:320px"><table><thead><tr><th>Connection</th><th>CLF</th><th class="t">Element</th><th class="t">Radiates into</th></tr></thead><tbody>
+  ${conns.map(q=>{const w=EM.where[q.o]||[],n=w.length?nodeOf(w[0]):null;return`<tr class="${n?'rowlink':''}" data-gon="${n?.id||''}" data-ge="${q.o}"><td>${q.n}</td><td>${fp(q.clf)}</td><td class="t">${esc(elName(q.o))}</td><td class="t">${w.map(i=>esc(cname(compById(i)))).join(', ')||'<span style="color:var(--mut)">– (structure only)</span>'}</td></tr>`}).join('')||'<tr><td colspan="4" class="t">No connections listed.</td></tr>'}</tbody></table></div></div></div>`;
+  $('#ealias').onchange=ev=>commit(()=>{P.elAlias=P.elAlias||{};const v=ev.target.value.trim();if(v)P.elAlias[e]=v;else delete P.elAlias[e]});
+  const cv=$('#cv');
+  const opts=()=>{const cu=UI.cur;let o;
+    if(mode==='rad'){const top=srcs.filter(s=>s.on&&s.sp).slice(0,10);
+      const lines=UI.eov==='src'?top.map(s=>({name:s.s,color:scol(s.s),vals:wsp(s.sp,UI.w),tot:['A','C','Z'].map(w=>wsum(s.sp,w))})):['SB','SSB'].filter(p=>x[p]).map(p=>({name:p==='SB'?'FSB':'SSB',color:PATHC[p],vals:wsp(x[p],UI.w),tot:['A','C','Z'].map(w=>wsum(x[p],w))}));
+      const ws=wsp(x.sp,UI.w)||P.bands.map(()=>null);
+      o={bars:ws,barName:'Element total',lines,totals:['A','C','Z'].map(w=>({label:w,v:wsum(x.sp,w),on:w===UI.w})),unit:wu(),ylab:`L${UI.w==='Z'?'p':UI.w}eq [dB]`,curLabel:cu<nb?`${bl(P.bands[cu])} Hz  ${f1(ws[cu])} ${wu()}`:`dB(${'ACZ'[cu-nb]}) ${f1(wsum(x.sp,'ACZ'[cu-nb]))}`,fmt:f1}}
+    else if(mode==='acc'){const top=srcs.filter(s=>s.on&&s.la?.sp).sort((p,q)=>(laTot(q.la.sp)??-1e9)-(laTot(p.la.sp)??-1e9)).slice(0,10);
+      const lines=UI.eov==='src'?top.map(s=>({name:s.s,color:scol(s.s),vals:laSp(s.la.sp),tot:[laTot(s.la.sp)]})):['SB','SSB'].filter(p=>la[p]).map(p=>({name:p==='SB'?'FSB':'SSB',color:PATHC[p],vals:laSp(la[p]),tot:[laTot(la[p])]}));
+      const bs=laSp(la.sp);
+      o={bars:bs,barName:'Element total',lines,totals:[{label:'Σ',v:laOv,on:true}],unit:luN(),ylab:UI.lu==='dB'?'La [dB re 1 µg]':UI.lu==='a'?'a [mm/s² rms]':'v [mm/s rms]',nice:true,zero:UI.lu!=='dB',curLabel:cu<nb?`${bl(P.bands[cu])} Hz  ${fu(bs[cu])} ${luN()}`:`Σ  ${fu(laOv)} ${luN()}`,fmt:fu}}
+    else{const lines=[['sig','Hull & layer σ','#2f6db5'],['abs','Absorption effect','#e07b1a'],['join','Joiner panel effect','#23946a']].filter(([k2])=>R[k2]).map(([k2,n,col])=>({name:n,color:col,vals:R[k2]}));
+      o={bars:P.bands.map(()=>null),lines,totals:[],unit:'dB',ylab:'dB',nice:true,curLabel:cu<nb?`${bl(P.bands[cu])} Hz`:'',fmt:f1}}
+    return{...o,bands:P.bands,barC:o.lines.length?'#c3d3e5':'#2f6296',totC:'#2f6296',cur:cu,ymin:UI.ymin,ymax:UI.ymax,xlab:'Octave band [Hz]'}};
+  const draw=()=>{const o=opts();drawChart(cv,o);const cu=UI.cur;
+    $('#leg').innerHTML=o.lines.map(l=>`<span class="chip"><span class="sw" style="background:${l.color}"></span>${esc(l.name)}</span>`).join('');
+    let h;if(cu<nb){h=`<h4>Cursor values</h4><div class="big">${bl(P.bands[cu])} Hz</div><div class="sm">${o.unit}</div>`+(o.barName?`<div class="kv"><span class="k"><b>${o.barName}</b></span><span class="v"><b>${o.fmt(o.bars[cu])}</b></span></div><hr>`:'')+o.lines.map(l=>({l,v:l.vals?.[cu]})).sort((p,q)=>(q.v??-1e9)-(p.v??-1e9)).map(({l,v})=>`<div class="kv"><span class="sw" style="background:${l.color}"></span><span class="k">${esc(l.name)}</span><span class="v">${o.fmt(v)}</span></div>`).join('')}
+    else{const j=cu-nb,tt=o.totals[j];h=`<h4>Cursor values</h4><div class="big">${mode==='rad'?'dB('+tt.label+')':'Σ overall'}</div><div class="sm">energetic sum of all bands · ${o.fmt(tt.v)}</div>`+o.lines.map(l=>({l,v:l.tot?.[j]})).sort((p,q)=>(q.v??-1e9)-(p.v??-1e9)).map(({l,v})=>`<div class="kv"><span class="sw" style="background:${l.color}"></span><span class="k">${esc(l.name)}</span><span class="v">${o.fmt(v)}</span></div>`).join('')}
+    if(mode==='acc'&&UI.lu==='v')h+=`<hr><div style="font-size:12px;color:var(--mut)">Velocity from the octave-band acceleration at the band centre frequency (v = a / 2πf).</div>`;
+    $('#curp').innerHTML=h;
+    const rowsB=mode==='sig'?o.lines.map(l=>[l.name,l.vals,null]):[['Element total',o.bars,o.totals[UI.w&&mode==='rad'?'ACZ'.indexOf(UI.w):0]?.v],...o.lines.map(l=>[l.name,l.vals,mode==='rad'?l.tot['ACZ'.indexOf(UI.w)]:l.tot[0]])];
+    $('#tEBb').innerHTML=rowsB.map(([n,a,tv],ri)=>`<tr class="${ri===0&&mode!=='sig'?'tot':''}"><td class="t">${esc(n)}</td>${(a||[]).map((v,i)=>`<td class="${i===cu?'hl':''}">${o.fmt(v)}</td>`).join('')}<td>${tv==null?'':o.fmt(tv)}</td></tr>`).join('');
+    document.querySelectorAll('#tEB th').forEach(th=>{const i=th.cellIndex-1;th.classList.toggle('hl',i===cu)})};
+  chartEvents(cv,draw,nb+nt,()=>({...opts(),title:`Element ${e} → ${cname(c)} · ${k.name}`,leg:true}),`${cname(c)}_El${e}_${mode}`);
+}
+
+/* ---------- model comparison A (original) vs B (treated) ---------- */
+const elOf=c=>c&&c.alt?P.alt?.el:P.el;
+const compById=id=>P.comps[id]||P.alt?.comps?.[id];
+const altOf=c=>P.alt&&P.alt.map[c.id]?P.alt.comps[P.alt.map[c.id]]:null;
+const mA=()=>P.mname||'Original',mB=()=>P.alt?.name||'Treated';
+const cmpOn=()=>!!(UI.cmp&&P.alt);
+const showB=()=>!!(P&&P.alt&&UI.det==='B');
+const mv=c=>!cmpOn()&&showB()&&altOf(c)?altOf(c):c;
+function mTag(c){if(!P||!P.alt)return'';const b=c?!!c.alt:showB();
+  return`<span class="mtag ${b?'b':'a'}"><span class="mb ${b?'b':''}">${b?'B':'A'}</span>${esc(b?mB():mA())}${cmpOn()?' · compare A vs B':''}</span>`}
+const mShort=n=>n.length>7?n.slice(0,7):n;
+function remapAlt(){if(!P.alt)return;const by={};Object.values(P.comps).forEach(c=>by[c.kind+'|'+c.name]=c.id);P.alt.map={};P.alt.rmap={};
+  Object.values(P.alt.comps).forEach(b=>{const a=by[b.kind+'|'+b.name];if(a){P.alt.map[a]=b.id;P.alt.rmap[b.id]=a}})}
+function setAlt(d,file){
+  if(d.bands.join()!==P.bands.join())throw Error('the octave bands of model B do not match model A');
+  const comps={};d.items.forEach((it,i)=>{const id='B'+i;comps[id]={id,alt:true,name:it.name,alias:'',kind:it.kind,src:it.src,crit:it.crit,critName:it.critName,xls:it.xls}});
+  d.sources.forEach(s=>{if(!P.sources.includes(s))P.sources.push(s)});d.paths.forEach(p=>{if(!P.paths.includes(p))P.paths.push(p);if(UI.pf[p]==null)UI.pf[p]=true});
+  P.alt={name:P.alt?.name||'Treated',file,comps,map:{},rmap:{},el:buildEl(d.el,comps)};P.mname=P.mname||'Original';remapAlt();
+  Object.values(P.comps).forEach(c=>{const b=altOf(c);if(c.crit==null&&b&&b.crit!=null)c.crit=b.crit});
+  const onlyB=Object.keys(comps).filter(id=>!P.alt.rmap[id]).length,onlyA=Object.values(P.comps).filter(c=>!altOf(c)).length;
+  UI.cmp=true;UI.mode='ab';
+  return{onlyA,onlyB,n:Object.keys(P.alt.map).length};
+}
+function importAlt(file){
+  if(!P){toast('Import model A (original) first');return}
+  const rd=new FileReader();rd.onload=()=>{let d,r;try{d=readWorkbook(new Uint8Array(rd.result));undo.push(snap());r=setAlt(d,file.name)}catch(e){toast('Model B import failed: '+e.message);return}
+    toast(`Model B loaded: ${r.n} compartments/positions matched by name`+(r.onlyA?` · ${r.onlyA} only in A`:'')+(r.onlyB?` · ${r.onlyB} only in B (not shown)`:''));save();render()};
+  rd.readAsArrayBuffer(file);
+}
+const RES={
+  en:{both:'Complies (both)',fixed:'Fixed by treatment',still:'Still exceeds',worse:'Worse with treatment',none:'No criteria',na:'Not in B'},
+  es:{both:'Cumple (ambos)',fixed:'Corregido con el tratamiento',still:'Sigue superando',worse:'Empeora con el tratamiento',none:'Sin criterio',na:'No está en B'}};
+function result(crit,va,vb){if(vb==null)return'na';if(crit==null)return'none';const a=va!=null&&va>crit,b=vb>crit;return!a&&!b?'both':a&&!b?'fixed':a&&b?'still':'worse'}
+const resCls={both:'good',fixed:'good',still:'bad',worse:'bad',none:'',na:''};
+function resPill(k,lang='en'){const col={both:'tg-a',fixed:'tg-a',still:'tg-x',worse:'tg-x',none:'',na:''}[k];return`<span class="pill ${col}">${RES[lang][k]}</span>`}
+function cmpRow(c,k){const b=altOf(c),va=compA(c,k),vb=b?compA(b,k):null;return{c,b,va,vb,d:va!=null&&vb!=null?vb-va:null,ma:c.crit!=null&&va!=null?c.crit-va:null,mb:c.crit!=null&&vb!=null?c.crit-vb:null,res:result(c.crit,va,vb),da:dominant(c,k),db:b?dominant(b,k):null}}
+function cmpKpis(list,k){const R=list.map(({c})=>cmpRow(c,k)),wc=R.filter(r=>r.c.crit!=null);
+  const okA=wc.filter(r=>r.ma!=null&&r.ma>=0).length,okB=wc.filter(r=>r.mb!=null&&r.mb>=0).length,ds=R.filter(r=>r.d!=null).map(r=>r.d);
+  return{R,n:wc.length,okA,okB,fixed:R.filter(r=>r.res==='fixed').length,still:R.filter(r=>r.res==='still').length,worse:R.filter(r=>r.res==='worse').length,dmean:ds.length?ds.reduce((a,b)=>a+b,0)/ds.length:null}}
+function cmpTable(list,k){
+  const K=cmpKpis(list,k),mxv=Math.max(1,...K.R.flatMap(r=>[r.va??0,r.vb??0,r.c.crit??0]));
+  return`<div class="tw"><table id="tCmp"><thead><tr><th class="t">Compartment</th><th>Criteria</th><th>${esc(mA())}</th><th>${esc(mB())}</th><th>Δ B−A</th><th>Margin A</th><th>Margin B</th><th class="t">Result</th><th class="t">Dominant source · ${esc(mB())}</th><th class="barcell">A / B</th></tr></thead><tbody>
+  ${K.R.map(r=>{const node=nodeOf(r.c.id);return`<tr class="rowlink" data-gon="${node?.id||''}"><td class="t" title="${esc(r.c.name)}">${r.c.kind==='poi'?'◎ ':''}${esc(cname(r.c))}</td><td><input class="num" data-crit="${r.c.id}" value="${r.c.crit??''}" placeholder="–"></td>
+   <td class="${r.ma!=null&&r.ma<0?'exc':''}">${f1(r.va)}</td><td class="${r.mb!=null&&r.mb<0?'exc':''}"><b>${f1(r.vb)}</b></td><td class="${r.d==null?'':r.d<0?'ok':r.d>0?'exc':''}">${fsg(r.d)}</td>
+   <td class="${r.ma==null?'':r.ma<0?'exc':'ok'}">${fsg(r.ma)}</td><td class="${r.mb==null?'':r.mb<0?'exc':'ok'}">${fsg(r.mb)}</td><td class="t">${resPill(r.res)}</td>
+   <td class="t">${r.db?`<span class="sw" style="display:inline-block;background:${scol(r.db.s)}"></span> ${esc(r.db.s)} <span style="color:var(--mut)">${r.db.sh!=null?r.db.sh.toFixed(0)+'%':''}</span>`:'–'}</td>
+   <td class="barcell"><div class="hb" style="height:6px;margin-bottom:3px;background:#eef1f4"><i style="width:${(r.va??0)/mxv*100}%;background:#e0a35a"></i>${r.c.crit!=null?`<b style="left:${r.c.crit/mxv*100}%"></b>`:''}</div><div class="hb" style="height:6px;background:#eef1f4"><i style="width:${(r.vb??0)/mxv*100}%"></i>${r.c.crit!=null?`<b style="left:${r.c.crit/mxv*100}%"></b>`:''}</div></td></tr>`}).join('')}</tbody></table></div>`;
+}
+function cmpKpiHtml(list,k){const K=cmpKpis(list,k);return`<div class="kpi"><div class="l">Comply · ${esc(mA())}</div><div class="v s">${K.n?K.okA+' / '+K.n:'no criteria'}</div></div>
+  <div class="kpi"><div class="l">Comply · ${esc(mB())}</div><div class="v s ${K.n&&K.okB<K.n?'bad':'good'}">${K.n?K.okB+' / '+K.n:'–'}</div></div>
+  <div class="kpi"><div class="l">Fixed</div><div class="v s good">${K.fixed}</div></div><div class="kpi"><div class="l">Still exceed</div><div class="v s ${K.still?'bad':''}">${K.still}</div></div>
+  <div class="kpi"><div class="l">Mean Δ</div><div class="v s">${fsg(K.dmean)}<span class="u">dB</span></div></div>`}
+function sentence(r,k,lang){
+  const es=lang==='es',cr=r.c.crit,f=v=>f1(v).replace('.',es?',':'.');
+  const part=(v,m)=>cr==null?'':m>=0?(es?` y cumple el criterio de ${f(cr)} dB(A) (margen ${f(m)} dB)`:` and complies with the ${f(cr)} dB(A) criterion (margin ${f(m)} dB)`):(es?` y supera el criterio de ${f(cr)} dB(A) en ${f(-m)} dB`:` and exceeds the ${f(cr)} dB(A) criterion by ${f(-m)} dB`);
+  let s=es?`En la condición “${k.name}”, con el modelo ${mA()} el nivel es ${f(r.va)} dB(A)${part(r.va,r.ma)}. `:`In the “${k.name}” condition, with model ${mA()} the level is ${f(r.va)} dB(A)${part(r.va,r.ma)}. `;
+  if(r.vb!=null&&Math.abs(r.d)<0.05)s+=es?`Con el modelo ${mB()} no cambia (${f(r.vb)} dB(A)).`:`With model ${mB()} it does not change (${f(r.vb)} dB(A)).`;
+  else if(r.vb!=null)s+=es?`Con el modelo ${mB()} ${r.d<=0?'baja':'sube'} a ${f(r.vb)} dB(A) (${r.d>0?'+':''}${f(r.d)} dB)${part(r.vb,r.mb)}.`:`With model ${mB()} it ${r.d<=0?'decreases':'increases'} to ${f(r.vb)} dB(A) (${r.d>0?'+':''}${f(r.d)} dB)${part(r.vb,r.mb)}.`;
+  if(r.db)s+=es?` Fuente dominante tras el tratamiento: ${r.db.s} (${r.db.sh.toFixed(0)} % de la energía).`:` Dominant source after treatment: ${r.db.s} (${r.db.sh.toFixed(0)} % of the energy).`;
+  return s;
+}
+function cmpBlock(cA,b,k,part){
+  const r=cmpRow(cA,k),rA=calc(cA,k),rB=calc(b,k);
+  const src=P.sources.filter(s=>cA.src[s]||b.src[s]).map(s=>{const xa=rA.srcs.find(z=>z.s===s),xb=rB.srcs.find(z=>z.s===s),a=xa?wsum(xa.sp,'A'):null,bb=xb?wsum(xb.sp,'A'):null;return{s,on:isOn(k,s),a,b:bb,d:a!=null&&bb!=null?bb-a:null}}).sort((p,q)=>(q.on-p.on)||((q.a??-1e9)-(p.a??-1e9)));
+  const LA=elCalc(cA,k),LB=elCalc(b,k),EA=elOf(cA),EB=elOf(b),els=[...new Set([...LA.map(x=>x.el),...LB.map(x=>x.el)])];
+  const er=els.map(e=>{const xa=LA.find(z=>z.el===e),xb=LB.find(z=>z.el===e),ta=treat(cA.id,e,EA),tb=treat(b.id,e,EB),a=xa?wsum(xa.sp,'A'):null,bb=xb?wsum(xb.sp,'A'):null;
+    return{e,a,b:bb,d:a!=null&&bb!=null?bb-a:null,ta,tb,ch:JSON.stringify([ta.ab,ta.jo,ta.jp,ta.hd])!==JSON.stringify([tb.ab,tb.jo,tb.jp,tb.hd])}}).sort((p,q)=>(q.a??-1e9)-(p.a??-1e9));
+  const node=nodeOf(cA.id);
+  const head=`<div class="card" style="padding:14px 16px;margin-bottom:12px;border-color:#b5cbe8;background:#f7faff">
+  <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end">
+   <div class="kpi"><div class="l">${esc(mA())}</div><div class="v s ${r.ma!=null&&r.ma<0?'bad':''}">${f1(r.va)}<span class="u">dB(A)</span></div></div>
+   <div class="kpi"><div class="l">${esc(mB())}</div><div class="v ${r.mb!=null&&r.mb<0?'bad':''}">${f1(r.vb)}<span class="u">dB(A)</span></div></div>
+   <div class="kpi"><div class="l">Δ B−A</div><div class="v s ${r.d!=null&&r.d<0?'good':'bad'}">${fsg(r.d)}<span class="u">dB</span></div></div>
+   <div class="kpi"><div class="l">Margin A / B</div><div class="v s"><span class="${r.ma==null?'':r.ma<0?'bad':'good'}">${fsg(r.ma)}</span> / <span class="${r.mb==null?'':r.mb<0?'bad':'good'}">${fsg(r.mb)}</span></div></div>
+   <div class="kpi"><div class="l">Result</div><div style="margin-top:6px">${resPill(r.res)}</div></div>
+   <span style="flex:1"></span><span style="color:var(--mut);font-size:13px">Detail tables below of</span><span class="seg" data-seg="det">${[['A',mA()],['B',mB()]].map(([v,l])=>`<button class="${(UI.det||'A')===v?'on':''}" data-v="${v}">${esc(l)}</button>`).join('')}</span></div>
+  <p style="margin:10px 0 0;font-size:13.5px;color:#33404c">${esc(sentence(r,k,'en'))}</p></div>`;
+  if(part==='h')return head;
+  return`<div class="grid2" style="grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);margin-bottom:6px">
+  <div><div class="secttl" style="margin-top:6px"><h3>Sources A → B</h3><button class="btn sm" data-copy="tCS">Copy</button></div><div class="tw" style="max-height:360px"><table id="tCS"><thead><tr><th class="t">Source</th><th>${esc(mShort(mA()))}</th><th>${esc(mShort(mB()))}</th><th>Δ</th></tr></thead><tbody>
+  ${src.map(o=>`<tr class="${o.on?'':'offr'}"><td class="t"><span class="sw" style="display:inline-block;background:${scol(o.s)}"></span> ${esc(o.s)}</td><td>${f1(o.a)}</td><td><b>${f1(o.b)}</b></td><td class="${o.d==null||!o.on?'':o.d<-0.05?'ok':o.d>0.05?'exc':''}">${fsg(o.d)}</td></tr>`).join('')}
+  <tr class="tot"><td class="t">Total (sources on)</td><td>${f1(r.va)}</td><td>${f1(r.vb)}</td><td>${fsg(r.d)}</td></tr></tbody></table></div></div>
+  <div>${er.length?`<div class="secttl" style="margin-top:6px"><h3>Panels A → B</h3><span class="note">radiated dB(A), treatment on this side</span><button class="btn sm" data-copy="tCE">Copy</button></div><div class="tw" style="max-height:360px"><table id="tCE"><thead><tr><th class="t">Element</th><th>${esc(mShort(mA()))}</th><th>${esc(mShort(mB()))}</th><th>Δ</th><th class="t">Treatment A</th><th class="t">Treatment B</th></tr></thead><tbody>
+  ${er.map(o=>`<tr class="rowlink" data-gon="${node?.id||''}" data-ge="${o.e}"><td class="t"><b>${esc(elName(o.e))}</b>${o.ch?' <span class="pill tg-j">changed</span>':''}</td><td>${f1(o.a)}</td><td><b>${f1(o.b)}</b></td><td class="${o.d==null?'':o.d<-0.05?'ok':o.d>0.05?'exc':''}">${fsg(o.d)}</td><td class="t">${treatHtml(o.ta)}</td><td class="t">${treatHtml(o.tb)}</td></tr>`).join('')}</tbody></table></div>`:''}</div></div>`;
+}
+function abOpts(cA,b,k,nb){
+  const rA=calc(cA,k),rB=calc(b,k),wa=wsp(rA.tot,UI.w)||P.bands.map(()=>null),wb=wsp(rB.tot,UI.w)||P.bands.map(()=>null),cu=Math.min(UI.cur,nb+1);UI.cur=cu;
+  return{bands:P.bands,bars:wb,barC:'#2f6296',totC:'#2f6296',lines:[{name:'A · '+mA(),color:'#e07b1a',vals:wa,dash:[7,4],w:2.4},{name:'B · '+mB(),color:'#2f6296',vals:P.bands.map(()=>null)}],
+    totals:[{label:'A',v:wsum(rA.tot,UI.w),on:false},{label:'B',v:wsum(rB.tot,UI.w),on:true}],cur:cu,
+    curLabel:cu<nb?`${bl(P.bands[cu])} Hz  ${f1(wa[cu])} → ${f1(wb[cu])}`:`${wu()}  ${f1(wsum(rA.tot,UI.w))} → ${f1(wsum(rB.tot,UI.w))}`,crit:UI.w==='A'?cA.crit:null,ymin:UI.ymin,ymax:UI.ymax,ylab:`L${UI.w==='Z'?'p':UI.w}eq [dB]`,xlab:'Octave band [Hz]',rA,rB};
+}
+function abPanel(o,nb){
+  const cu=o.cur,{rA,rB}=o;let h;
+  const row=(s,a,b)=>`<div class="kv"><span class="sw" style="background:${scol(s)}"></span><span class="k">${esc(s)}</span><span class="v">${f1(a)} → <b>${f1(b)}</b></span></div>`;
+  if(cu<nb){const W=wt(P.bands[cu],UI.w),g=v=>v==null?null:v+W,ta=g(rA.tot?.[cu]),tb=g(rB.tot?.[cu]);
+    const ls=P.sources.map(s=>{const xa=rA.srcs.find(z=>z.s===s&&z.on),xb=rB.srcs.find(z=>z.s===s&&z.on);return{s,a:g(xa?.sp?.[cu]),b:g(xb?.sp?.[cu])}}).filter(z=>z.a!=null||z.b!=null).sort((p,q)=>(q.b??-1e9)-(p.b??-1e9));
+    h=`<h4>Cursor values · A → B</h4><div class="big">${bl(P.bands[cu])} Hz</div><div class="sm">${wu()} · ${f1(ta)} → ${f1(tb)} (Δ ${fsg(ta!=null&&tb!=null?tb-ta:null)})</div>${ls.map(z=>row(z.s,z.a,z.b)).join('')}`}
+  else{const ta=wsum(rA.tot,UI.w),tb=wsum(rB.tot,UI.w);const ls=P.sources.map(s=>{const xa=rA.srcs.find(z=>z.s===s&&z.on),xb=rB.srcs.find(z=>z.s===s&&z.on);return{s,a:wsum(xa?.sp,UI.w),b:wsum(xb?.sp,UI.w)}}).filter(z=>z.a!=null||z.b!=null).sort((p,q)=>(q.b??-1e9)-(p.b??-1e9));
+    h=`<h4>Cursor values · A → B</h4><div class="big">${wu()} total</div><div class="sm">${f1(ta)} → ${f1(tb)} (Δ ${fsg(ta!=null&&tb!=null?tb-ta:null)})</div>${ls.map(z=>row(z.s,z.a,z.b)).join('')}`}
+  return h+`<hr><div style="font-size:12px;color:var(--mut)">Bars and column B: ${esc(mB())}. Dashed line and column A: ${esc(mA())}.</div>`;
+}
+
+function elCmpStrip(cA,b,e,k){
+  const EA=elOf(cA),EB=elOf(b),xa=elCalc(cA,k).find(z=>z.el===e),xb=elCalc(b,k).find(z=>z.el===e),la=laCalc(e,k,EA),lb=laCalc(e,k,EB),va=wsum(xa?.sp,'A'),vb=wsum(xb?.sp,'A'),ga=laTot(la.sp),gb=laTot(lb.sp);
+  return`<div class="card" style="padding:10px 14px;margin-bottom:10px;border-color:#b5cbe8;background:#f7faff;display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;font-size:13.5px">
+  <span>Radiated <b class="mono">${f1(va)} → ${f1(vb)}</b> dB(A) <span class="${va!=null&&vb!=null&&vb<va?'good':'bad'} mono">(${fsg(va!=null&&vb!=null?vb-va:null)})</span></span>
+  <span>La Σ <b class="mono">${fu(ga)} → ${fu(gb)}</b> ${luN()}</span><span>Treatment ${esc(mA())}: ${treatHtml(treat(cA.id,e,EA))}</span><span>${esc(mB())}: ${treatHtml(treat(b.id,e,EB))}</span>
+  <span style="flex:1"></span><span style="color:var(--mut)">Show</span><span class="seg" data-seg="det">${[['A',mA()],['B',mB()]].map(([v,l])=>`<button class="${(UI.det||'A')===v?'on':''}" data-v="${v}">${esc(l)}</button>`).join('')}</span></div>`;
+}
+/* ---------- report ---------- */
+function reportDialog(){
+  if(!P)return;const d=document.createElement('div');d.id='dlg';
+  const fl=allFolders().filter(f=>compsIn(f).length);
+  d.innerHTML=`<div class="dlgb card"><h3 style="margin:0 0 10px">Comparison report</h3>
+  ${P.alt?'':'<p style="color:var(--bad);font-size:13px">Model B is not loaded: the report will show model A only.</p>'}
+  <label class="dl">Language <select id="rLang"><option value="es">Español</option><option value="en">English</option></select></label>
+  <label class="dl">Scope <select id="rScope"><option value="root">All compartments</option>${fl.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}</select></label>
+  <div class="dl">Conditions</div>${P.conds.map(q=>`<label class="dl" style="padding-left:12px"><input type="checkbox" data-rc="${q.id}" ${q.id===P.active?'checked':''}> ${esc(q.name)}</label>`).join('')}
+  <label class="dl"><input type="checkbox" id="rDet" checked> One page per compartment (chart, bands, sources, panels)</label>
+  <label class="dl"><input type="checkbox" id="rPoi"> Include positions of interest</label>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn" id="rCancel">Cancel</button><button class="btn" id="rDl">Download .html</button><button class="btn pri" id="rOpen">Open report</button></div></div>`;
+  document.body.append(d);
+  const go=dlOnly=>{const conds=P.conds.filter(q=>d.querySelector(`[data-rc="${q.id}"]`).checked);if(!conds.length){toast('Choose at least one condition');return}
+    const sc=$('#rScope').value,f=sc==='root'?P.tree:findNode(sc).n;let list=compsIn(f);if(!$('#rPoi').checked)list=list.filter(x=>x.c.kind!=='poi');
+    const html=buildReport({lang:$('#rLang').value,conds,list,det:$('#rDet').checked,scope:sc==='root'?null:f.name});d.remove();render();
+    const name=base()+'_report.html';
+    if(!dlOnly){const w=window.open('','_blank');if(w){w.document.open();w.document.write(html);w.document.close();return}}
+    dl(new Blob([html],{type:'text/html'}),name);toast('Report downloaded – open it in the browser and print to PDF')};
+  $('#rCancel').onclick=()=>d.remove();$('#rOpen').onclick=()=>go(false);$('#rDl').onclick=()=>go(true);
+}
+function chartPng(o,W=1100,H=470){const c=document.createElement('canvas');c.width=W*2;c.height=H*2;const x=c.getContext('2d');x.scale(2,2);paint(x,W,H,o);return c.toDataURL('image/png')}
+function buildReport({lang,conds,list,det,scope}){
+  const es=lang==='es',T=(a,b)=>es?a:b,hasB=!!P.alt,dec=v=>es?String(v).replace('.',','):String(v);
+  const F=v=>dec(f1(v)),S=v=>dec(fsg(v)),now=new Date().toLocaleDateString(es?'es-ES':'en-GB');
+  const st=`body{font:14px/1.5 'IBM Plex Sans',Segoe UI,Arial,sans-serif;color:#1c232b;max-width:1060px;margin:0 auto;padding:28px}h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:28px 0 8px;border-bottom:2px solid #2c5f95;padding-bottom:4px}h3{font-size:16px;margin:0 0 6px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0 12px}th,td{border:1px solid #d6dbe0;padding:4px 7px;text-align:right}th{background:#eef2f6}td.t,th.t{text-align:left}.ok{color:#23845a;font-weight:600}.bad{color:#c62828;font-weight:600}
+  .pg{page-break-before:always;padding-top:6px}.meta{color:#5a6570;font-size:13px}.pill{display:inline-block;border-radius:9px;padding:0 7px;font-size:11.5px;border:1px solid #ccc}.g{background:#e6f4ec;border-color:#a9d6bb;color:#1d6b45}.r{background:#fdecec;border-color:#efb3b3;color:#a32020}
+  img{width:100%;border:1px solid #e1e5e9}.bar{position:sticky;top:0;background:#fff;padding:8px 0;border-bottom:1px solid #ddd;margin-bottom:14px}.bar button{font:inherit;padding:6px 12px;margin-right:6px}@media print{.bar{display:none}body{padding:0}}`;
+  const pill=k=>`<span class="pill ${k==='both'||k==='fixed'?'g':k==='still'||k==='worse'?'r':''}">${RES[lang][k]}</span>`;
+  let h=`<!DOCTYPE html><html lang="${lang}"><head><meta charset="utf-8"><title>${T('Informe de ruido','Noise report')} – ${esc(base())}</title><style>${st}</style></head><body>
+  <div class="bar"><button onclick="window.print()">${T('Imprimir / Guardar PDF','Print / Save PDF')}</button><span class="meta">${T('Usa “Guardar como PDF” en el diálogo de impresión.','Use “Save as PDF” in the print dialog.')}</span></div>
+  <h1>${T('Predicción de ruido a bordo','Onboard noise prediction')}${hasB?T(' – comparación ',' – comparison ')+esc(mA())+' / '+esc(mB()):''}</h1>
+  <div class="meta">${T('Método SEA (Designer Noise)','SEA method (Designer Noise)')} · ${T('Modelo A','Model A')}: <b>${esc(mA())}</b> (${esc(P.file)})${hasB?` · ${T('Modelo B','Model B')}: <b>${esc(mB())}</b> (${esc(P.alt.file)})`:''} · ${now}${scope?' · '+esc(scope):''}</div>
+  <h2>1. ${T('Condiciones de navegación','Navigation conditions')}</h2><table><tr><th class="t">${T('Condición','Condition')}</th><th class="t">${T('Descripción','Description')}</th><th class="t">${T('Fuentes en funcionamiento (offset dB)','Sources running (offset dB)')}</th></tr>
+  ${conds.map(q=>`<tr><td class="t"><b>${esc(q.name)}</b></td><td class="t">${esc(q.notes||'')}</td><td class="t">${P.sources.filter(s=>isOn(q,s)).map(s=>esc(s)+(q.off[s]?` (${S(q.off[s])})`:'')).join(', ')}</td></tr>`).join('')}</table>
+  <p class="meta">${T('Niveles en dB(A) como suma energética de las bandas de octava 31,5 Hz – 8 kHz de las fuentes activas. Margen = criterio − nivel (negativo: incumple).','Levels in dB(A), energetic sum of the 31.5 Hz – 8 kHz octave bands of the running sources. Margin = criterion − level (negative: non-compliant).')}</p>`;
+  conds.forEach((q,qi)=>{const K=cmpKpis(list,q);
+    h+=`<h2>${2+qi}. ${T('Resumen','Summary')} – ${esc(q.name)}</h2>
+    <p>${K.n?(hasB?T(`Cumplen ${K.okA} de ${K.n} espacios con ${esc(mA())} y ${K.okB} de ${K.n} con ${esc(mB())}. Corregidos con el tratamiento: ${K.fixed}; siguen superando: ${K.still}${K.worse?`; empeoran: ${K.worse}`:''}. Variación media ${S(K.dmean)} dB.`,`${K.okA} of ${K.n} spaces comply with ${esc(mA())} and ${K.okB} of ${K.n} with ${esc(mB())}. Fixed by the treatment: ${K.fixed}; still exceeding: ${K.still}${K.worse?`; worse: ${K.worse}`:''}. Mean change ${S(K.dmean)} dB.`):T(`Cumplen ${K.okA} de ${K.n} espacios con criterio.`,`${K.okA} of ${K.n} spaces with criteria comply.`)):T('No hay criterios definidos.','No criteria defined.')}</p>
+    <table><tr><th class="t">${T('Espacio','Space')}</th><th>${T('Criterio','Criterion')}</th><th>${esc(mA())}</th>${hasB?`<th>${esc(mB())}</th><th>Δ</th>`:''}<th>${T('Margen','Margin')} A</th>${hasB?`<th>${T('Margen','Margin')} B</th><th class="t">${T('Resultado','Result')}</th>`:''}</tr>
+    ${K.R.map(r=>`<tr><td class="t">${esc(cname(r.c))}</td><td>${r.c.crit==null?'–':F(r.c.crit)}</td><td>${F(r.va)}</td>${hasB?`<td><b>${F(r.vb)}</b></td><td>${S(r.d)}</td>`:''}<td class="${r.ma==null?'':r.ma<0?'bad':'ok'}">${S(r.ma)}</td>${hasB?`<td class="${r.mb==null?'':r.mb<0?'bad':'ok'}">${S(r.mb)}</td><td class="t">${pill(r.res)}</td>`:''}</tr>`).join('')}</table>`;
+    if(det)K.R.forEach(r=>{const nb=P.bands.length,rA=calc(r.c,q),b=r.b,rB=b?calc(b,q):null,wa=wsp(rA.tot,'A')||P.bands.map(()=>null),wb=rB?wsp(rB.tot,'A')||P.bands.map(()=>null):null;
+      const img=chartPng({bands:P.bands,bars:wb||wa,barC:'#2f6296',totC:'#2f6296',lines:wb?[{name:'A · '+mA(),color:'#e07b1a',vals:wa,dash:[7,4],w:2.4},{name:'B · '+mB(),color:'#2f6296',vals:P.bands.map(()=>null)}]:[],
+        totals:wb?[{label:'A',v:r.va,on:false},{label:'B',v:r.vb,on:true}]:[{label:'A',v:r.va,on:true}],cur:-1,crit:r.c.crit,ymin:'',ymax:'',ylab:'LpA [dB(A)]',xlab:T('Banda de octava [Hz]','Octave band [Hz]'),title:`${cname(r.c)} · ${q.name}`,leg:!!wb});
+      const srcs=P.sources.map(s=>{const xa=rA.srcs.find(z=>z.s===s&&z.on),xb=rB?.srcs.find(z=>z.s===s&&z.on);return{s,a:wsum(xa?.sp,'A'),b:wsum(xb?.sp,'A')}}).filter(z=>z.a!=null||z.b!=null).sort((p,qq)=>((qq.b??qq.a)??-1e9)-((p.b??p.a)??-1e9)).slice(0,6);
+      let pan='';if(b){const LA=elCalc(r.c,q),LB=elCalc(b,q),EA=elOf(r.c),EB=elOf(b);const ch=[...new Set([...LA,...LB].map(x=>x.el))].map(e=>{const ta=treat(r.c.id,e,EA),tb=treat(b.id,e,EB),xa=LA.find(z=>z.el===e),xb=LB.find(z=>z.el===e);return{e,ta,tb,a:wsum(xa?.sp,'A'),bb:wsum(xb?.sp,'A')}}).filter(o=>o.ta.ab!==o.tb.ab||o.ta.jo!==o.tb.jo||o.ta.jp!==o.tb.jp||o.ta.hd!==o.tb.hd);
+        const tt=t=>[t.ab?T('Absorción ','Absorption ')+dec(t.ab.toFixed(0))+' dB':'',t.jo?'Joiner '+dec(t.jo.toFixed(0))+' dB':'',t.jp?T('Panel joiner η','Joiner panel η'):'',t.hd?T('Amortiguamiento ↑','Damping ↑'):''].filter(Boolean).join(', ')||T('sin tratamiento','bare');
+        if(ch.length)pan=`<h3 style="margin-top:8px">${T('Paneles con cambio de tratamiento','Panels with a change of treatment')}</h3><table><tr><th class="t">${T('Elemento','Element')}</th><th class="t">${esc(mA())}</th><th class="t">${esc(mB())}</th><th>${T('Radiado','Radiated')} A</th><th>${T('Radiado','Radiated')} B</th><th>Δ</th></tr>${ch.map(o=>`<tr><td class="t">${esc(elName(o.e))}</td><td class="t">${tt(o.ta)}</td><td class="t">${tt(o.tb)}</td><td>${F(o.a)}</td><td>${F(o.bb)}</td><td>${S(o.a!=null&&o.bb!=null?o.bb-o.a:null)}</td></tr>`).join('')}</table>`}
+      h+=`<div class="pg"><h3>${esc(cname(r.c))} – ${esc(q.name)} ${hasB?pill(r.res):''}</h3><p>${esc(hasB?sentence(r,q,lang):sentence({...r,vb:null,db:r.da},q,lang))}</p><img src="${img}" alt="">
+      <table><tr><th class="t">dB(A)</th>${P.bands.map(x=>`<th>${bl(x)}</th>`).join('')}<th>${T('Total','Total')}</th></tr><tr><td class="t">${esc(mA())}</td>${wa.map(v=>`<td>${F(v)}</td>`).join('')}<td><b>${F(r.va)}</b></td></tr>
+      ${wb?`<tr><td class="t">${esc(mB())}</td>${wb.map(v=>`<td>${F(v)}</td>`).join('')}<td><b>${F(r.vb)}</b></td></tr><tr><td class="t">Δ B−A</td>${wb.map((v,i)=>`<td>${S(v!=null&&wa[i]!=null?v-wa[i]:null)}</td>`).join('')}<td><b>${S(r.d)}</b></td></tr>`:''}</table>
+      <h3>${T('Fuentes principales','Main sources')}</h3><table><tr><th class="t">${T('Fuente','Source')}</th><th>${esc(mA())}</th>${hasB?`<th>${esc(mB())}</th><th>Δ</th>`:''}</tr>${srcs.map(z=>`<tr><td class="t">${esc(z.s)}</td><td>${F(z.a)}</td>${hasB?`<td><b>${F(z.b)}</b></td><td>${S(z.a!=null&&z.b!=null?z.b-z.a:null)}</td>`:''}</tr>`).join('')}</table>${pan}</div>`});
+  });
+  return h+'</body></html>';
+}
+
+/* ---------- events in main ---------- */
+$('#main').addEventListener('click',e=>{
+  const t=e.target;if(t.closest('input'))return;
+  const seg=t.closest('[data-seg] button');if(seg){const k=seg.parentNode.dataset.seg;if(k==='emode'&&UI.emode!==seg.dataset.v)UI.cur=null;UI[k]=seg.dataset.v;if(k==='w'){const nb=P.bands.length;if(UI.cur>=nb)UI.cur=nb+'ACZ'.indexOf(UI.w)}save();render();return}
+  const pf=t.closest('[data-pf]');if(pf){const p=pf.dataset.pf;UI.pf[p]=UI.pf[p]===false;save();render();return}
+  const cp=t.closest('[data-copy]');if(cp){copyTable($('#'+cp.dataset.copy));return}
+  const tg=t.closest('button[data-tog]');if(tg){togSrc(tg.dataset.tog);return}
+  const ac=t.closest('[data-act]');if(ac){commit(()=>P.active=ac.dataset.act);return}
+  const gc=t.closest('[data-gocomp]');if(gc){UI.sel={t:'c',id:gc.dataset.gocomp};render();return}
+  const gs=t.closest('[data-gos]');if(gs&&UI.sel.t==='c'){UI.sel={t:'s',id:UI.sel.id,src:gs.dataset.gos};render();return}
+  const gn=t.closest('[data-gon]');if(gn){revealNode(gn.dataset.gon);if(!gn.dataset.gon)return;UI.sel=gn.dataset.ge?{t:'e',id:gn.dataset.gon,el:+gn.dataset.ge}:gn.dataset.gs?{t:'s',id:gn.dataset.gon,src:gn.dataset.gs}:{t:'c',id:gn.dataset.gon};render();$('#main').scrollTop=0}
+});
+$('#main').addEventListener('change',e=>{
+  const t=e.target,d=t.dataset;
+  if(d.tog!=null){togSrc(d.tog);return}
+  if(d.ctog!=null){const k=P.conds.find(c=>c.id===UI.sel.id);commit(()=>k.on[d.ctog]=t.checked);return}
+  if(d.off!=null||d.coff!=null){const k=d.coff!=null?P.conds.find(c=>c.id===UI.sel.id):cond(),s=d.off??d.coff,v=num(t.value)??0;commit(()=>{if(v)k.off[s]=v;else delete k.off[s]});return}
+  if(d.crit!=null){const v=t.value.trim()===''?null:num(t.value);commit(()=>P.comps[d.crit].crit=v);return}
+  if(t.id==='crit'){const f=findNode(UI.sel.id);const v=t.value.trim()===''?null:num(t.value);commit(()=>P.comps[f.n.cid].crit=v);return}
+  if(d.y){UI[d.y]=t.value.trim();render()}
+});
+function togSrc(s){const k=cond();commit(()=>k.on[s]=!isOn(k,s))}
+function revealNode(id){pathTo(id).forEach(n=>n.open=true)}
+function copyTable(tb){if(!tb)return;const rows=[...tb.rows].map(r=>[...r.cells].map(c=>{const i=c.querySelector('input:not([type=checkbox])');const cb=c.querySelector('input[type=checkbox]');return i?i.value:cb?(cb.checked?'on':'off'):c.innerText.trim()}).join('\t')).join('\n');
+  (navigator.clipboard?navigator.clipboard.writeText(rows):Promise.reject()).then(()=>toast('Table copied – paste it into Excel'),()=>{const ta=document.createElement('textarea');ta.value=rows;document.body.append(ta);ta.select();document.execCommand('copy');ta.remove();toast('Table copied')})}
+
+/* ---------- sidebar events ---------- */
+$('#conds').addEventListener('click',e=>{const ed=e.target.closest('[data-edit]');const row=e.target.closest('[data-cond]');if(!row)return;const id=row.dataset.cond;
+  if(ed){P.active=id;UI.sel={t:'cond',id};save();render();return}
+  if(P.active!==id)commit(()=>P.active=id);else render()});
+$('#conds').addEventListener('dblclick',e=>{const row=e.target.closest('[data-cond]');if(row){UI.sel={t:'cond',id:row.dataset.cond};render()}});
+$('#conds').addEventListener('contextmenu',e=>{const row=e.target.closest('[data-cond]');if(!row)return;e.preventDefault();const k=P.conds.find(c=>c.id===row.dataset.cond);
+  menu(e,[['Make active',()=>commit(()=>P.active=k.id)],['Edit…',()=>{UI.sel={t:'cond',id:k.id};render()}],['Rename','F2',()=>renameCond(k)],['Duplicate',()=>dupCond(k)],'-',['Move up',()=>moveCond(k,-1)],['Move down',()=>moveCond(k,1)],'-',['Delete',()=>delCond(k)]])});
+function moveCond(k,d){const i=P.conds.indexOf(k),j=i+d;if(j<0||j>=P.conds.length)return;commit(()=>{P.conds.splice(i,1);P.conds.splice(j,0,k)})}
+function renameCond(k){const row=document.querySelector(`[data-cond="${k.id}"] .nm`);inlineEdit(row,k.name,v=>commit(()=>k.name=v))}
+$('#tree').addEventListener('click',e=>{
+  if(!P)return;const row=e.target.closest('.tr');if(!row)return;const id=row.dataset.node,f=findNode(id);if(!f)return;
+  if(e.target.matches('input[data-tog]')){togSrc(e.target.dataset.tog);return}
+  if(e.target.matches('input'))return;
+  if(row.dataset.egrp){f.n.eopen=!f.n.eopen;save();rSide();return}
+  if(row.dataset.el!=null){UI.sel={t:'e',id,el:+row.dataset.el};render();return}
+  if(row.dataset.src!=null){UI.sel={t:'s',id,src:row.dataset.src};render();return}
+  if(e.target.closest('.car')){f.n.open=!f.n.open;save();rSide();return}
+  if(UI.sel&&UI.sel.id===id&&UI.sel.t!=='s'&&f.n.t==='f'){f.n.open=!f.n.open}
+  UI.sel={t:f.n.t==='f'?'f':'c',id};save();render();
+});
+$('#tree').addEventListener('dblclick',e=>{const row=e.target.closest('.tr');if(!row||row.dataset.src!=null)return;const f=findNode(row.dataset.node);if(f&&f.n.t==='c'){f.n.open=!f.n.open;save();rSide()}});
+$('#tree').addEventListener('contextmenu',e=>{
+  if(!P)return;e.preventDefault();const row=e.target.closest('.tr');
+  const gen=[['New folder',()=>newFolder(P.tree)],['Group compartments by first digit',groupByDeck],['Restore removed compartments',restore],'-',['Expand all',()=>openAll(true)],['Collapse all',()=>openAll(false)]];
+  if(row&&(row.dataset.el!=null||row.dataset.egrp)){if(row.dataset.el!=null){const el=+row.dataset.el;menu(e,[['Show element',()=>{UI.sel={t:'e',id:row.dataset.node,el};render()}],['Rename element (alias)',()=>{const v=prompt('Name for element '+el+':',P.elAlias?.[el]||'');if(v!==null)commit(()=>{P.elAlias=P.elAlias||{};if(v.trim())P.elAlias[el]=v.trim();else delete P.elAlias[el]})}]])}return}
+  if(!row||row.dataset.src!=null){if(row&&row.dataset.src!=null){const s=row.dataset.src;menu(e,[[isOn(cond(),s)?'Switch off in condition':'Switch on in condition',()=>togSrc(s)],['Show source',()=>{UI.sel={t:'s',id:row.dataset.node,src:s};render()}]]);return}menu(e,gen);return}
+  const f=findNode(row.dataset.node);UI.sel={t:f.n.t==='f'?'f':'c',id:f.n.id};render();
+  if(f.n.t==='f')menu(e,[['New subfolder',()=>newFolder(f.n)],['Rename','F2',()=>renameNode(f.n)],['Expand all',()=>openAll(true,f.n)],['Collapse all',()=>openAll(false,f.n)],'-',['Delete folder (keep contents)','Del',()=>delNode(f.n)],'-',...gen.slice(0,3)]);
+  else menu(e,[['Rename (alias)','F2',()=>renameNode(f.n)],['Clear alias',()=>commit(()=>P.comps[f.n.cid].alias='')],['Move to…',()=>moveToMenu(e,f.n)],'-',['Remove from tree','Del',()=>delNode(f.n)]]);
+});
+function newFolder(par){let n;commit(()=>{n=folder('New folder');par.ch.unshift(n);par.open=true;UI.sel={t:'f',id:n.id}});renameNode(n)}
+function renameNode(n){const row=document.querySelector(`.tr[data-node="${n.id}"]:not([data-src]) .nm`);if(!row)return;
+  if(n.t==='f')inlineEdit(row,n.name,v=>commit(()=>n.name=v));else{const c=P.comps[n.cid];inlineEdit(row,cname(c),v=>commit(()=>c.alias=v===short(c.name)?'':v))}}
+function inlineEdit(el,val,ok){const i=document.createElement('input');i.className='ren';i.value=val;el.replaceWith(i);i.focus();i.select();let done=false;
+  const fin=k=>{if(done)return;done=true;const v=i.value.trim();if(k&&v&&v!==val)ok(v);else render()};
+  i.onkeydown=e=>{e.stopPropagation();if(e.key==='Enter')fin(true);if(e.key==='Escape')fin(false)};i.onblur=()=>fin(true);i.onclick=e=>e.stopPropagation()}
+function delNode(n){const f=findNode(n.id);if(!f||!f.par)return;commit(()=>{const i=f.par.ch.indexOf(n);f.par.ch.splice(i,1,...(n.t==='f'?n.ch:[]));UI.sel={t:'f',id:f.par.id==='root'?(P.tree.ch[0]?.id||'root'):f.par.id}});if(n.t==='c')toast('Removed from the tree – “Restore removed compartments” brings it back')}
+function restore(){const have=new Set(compsIn(P.tree).map(x=>x.c.id)),miss=Object.keys(P.comps).filter(id=>!have.has(id));if(!miss.length){toast('Nothing to restore');return}commit(()=>{const f=folder('Restored');miss.forEach(id=>f.ch.push(leaf(id)));P.tree.ch.push(f)})}
+function openAll(v,n=P.tree){commit(()=>{const w=x=>{for(const c of x.ch){if(c.t==='f'){c.open=v;w(c)}else if(!v)c.open=false}};w(n)})}
+function groupByDeck(){const top=P.tree.ch.find(n=>n.t==='f'&&compsIn(n).some(x=>x.c.kind==='comp'));if(!top)return;
+  commit(()=>{const items=compsIn(top).filter(x=>x.c.kind==='comp');const groups={};items.forEach(({node,c})=>{const m=short(c.name).match(/^(\d)/);const g=m?m[1]+'xx':'Other';(groups[g]=groups[g]||[]).push(node)});
+    top.ch=Object.keys(groups).sort().map(g=>{const f=folder(g);f.ch=groups[g];return f})});toast('Grouped by first digit of the name – rename the folders (e.g. decks) with F2')}
+function moveToMenu(e,n){const fs=allFolders().filter(f=>!f.ch.includes(n));menu(e,fs.map(f=>[f.name,()=>moveNode(n.id,f.id,'in')]))}
+function moveNode(id,tid,how){if(id===tid)return;const s=findNode(id),t=findNode(tid);if(!s||!t)return;if(s.n.t==='f'&&findNode(tid,s.n))return;
+  commit(()=>{s.par.ch.splice(s.par.ch.indexOf(s.n),1);if(how==='in'){t.n.ch.push(s.n);t.n.open=true}else{const p=findNode(tid).par;p.ch.splice(p.ch.indexOf(t.n),0,s.n)}})}
+let dragId=null;
+$('#tree').addEventListener('dragstart',e=>{const r=e.target.closest('.tr');if(!r||r.dataset.src!=null||r.dataset.el!=null||r.dataset.egrp){e.preventDefault();return}dragId=r.dataset.node;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',dragId)});
+$('#tree').addEventListener('dragover',e=>{if(!dragId)return;const r=e.target.closest('.tr');document.querySelectorAll('.dropin,.dropbefore').forEach(x=>x.classList.remove('dropin','dropbefore'));if(!r||r.dataset.src!=null||r.dataset.el!=null||r.dataset.egrp)return;e.preventDefault();const f=findNode(r.dataset.node);const rc=r.getBoundingClientRect();const before=f.n.t==='c'||e.clientY<rc.top+rc.height*.28;r.classList.add(before?'dropbefore':'dropin')});
+$('#tree').addEventListener('drop',e=>{e.preventDefault();const r=e.target.closest('.tr');const id=dragId;dragId=null;if(!r||!id)return;const how=r.classList.contains('dropin')?'in':'before';moveNode(id,r.dataset.node,how)});
+$('#tree').addEventListener('dragend',()=>{dragId=null;document.querySelectorAll('.dropin,.dropbefore').forEach(x=>x.classList.remove('dropin','dropbefore'))});
+
+/* ---------- context menu ---------- */
+function menu(e,items){const m=$('#menu');m.innerHTML=items.map((it,i)=>it==='-'?'<hr>':`<button data-i="${i}">${esc(it[0])}${typeof it[1]==='string'?`<kbd>${it[1]}</kbd>`:''}</button>`).join('');
+  m.style.display='block';const w=m.offsetWidth,h=m.offsetHeight;m.style.left=Math.min(e.clientX,innerWidth-w-6)+'px';m.style.top=Math.min(e.clientY,innerHeight-h-6)+'px';
+  m.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;const it=items[+b.dataset.i];m.style.display='none';(typeof it[1]==='function'?it[1]:it[2])()}}
+document.addEventListener('mousedown',e=>{if(!e.target.closest('#menu'))$('#menu').style.display='none'});
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',e=>{
+  if(e.target.matches('input,textarea,select'))return;
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();doUndo();return}
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveJson();return}
+  if(!P||!UI.sel)return;
+  if(e.key==='F2'){e.preventDefault();if(UI.sel.t==='e'){$('#ealias')?.focus();return}if(UI.sel.t==='cond')renameCond(P.conds.find(c=>c.id===UI.sel.id));else{const f=findNode(UI.sel.id);if(f&&f.n.id!=='root')renameNode(f.n)}}
+  if(e.key==='Delete'&&document.activeElement?.id!=='cv'){if(UI.sel.t==='cond')delCond(P.conds.find(c=>c.id===UI.sel.id));else if(UI.sel.t==='c'||UI.sel.t==='f'){const f=findNode(UI.sel.id);if(f&&f.par)delNode(f.n)}}
+});
+
+/* ---------- files ---------- */
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+const base=()=>(P.file||'project').replace(/\.(xlsx?|xlsm|json)$/i,'');
+function saveJson(){if(!P)return;dl(new Blob([JSON.stringify({app:'SEA Noise Manager',...P},null,1)],{type:'application/json'}),base().replace(/_SEA$/,'')+'_SEA.json');toast('Project saved')}
+function exportXlsx(){
+  if(!P)return;if(!window.XLSX){toast('SheetJS not loaded');return}
+  const wb=XLSX.utils.book_new(),list=compsIn(P.tree),fp=n=>pathTo(n.id).filter(x=>x.t==='f').map(x=>x.name).join(' / ');
+  const r2=v=>v==null||!isFinite(v)?null:Math.round(v*10)/10;
+  const sum=[['Folder','Compartment','Designer Noise name','Type','Criteria dB(A)',...P.conds.map(q=>q.name+' dB(A)'),...P.conds.map(q=>q.name+' margin')]];
+  list.forEach(({node,c})=>{const v=P.conds.map(q=>compA(c,q));sum.push([fp(node),cname(c),c.name,c.kind==='poi'?'POI':'Compartment',c.crit,...v.map(r2),...v.map(x=>c.crit!=null&&x!=null?r2(c.crit-x):null)])});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sum),'Summary');
+  const cs=[['Condition','Notes','Source','On','Offset dB']];P.conds.forEach(q=>P.sources.forEach(s=>cs.push([q.name,q.notes||'',s,isOn(q,s)?1:0,q.off[s]||0])));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(cs),'Conditions');
+  const used=new Set();
+  P.conds.forEach(q=>{const a=[['Compartment','Total dB(A)','Criteria','Margin',...P.sources.map(s=>s+(isOn(q,s)?'':' (off)')+(q.off[s]?` [${fsg(q.off[s])}]`:''))]];
+    list.forEach(({c})=>{const r=calc(c,q),t=wsum(r.tot,'A');a.push([cname(c),r2(t),c.crit,c.crit!=null&&t!=null?r2(c.crit-t):null,...P.sources.map(s=>{const x=r.srcs.find(z=>z.s===s);return x&&x.on?r2(wsum(x.sp,'A')):null})])});
+    let nm=('C_'+q.name).replace(/[\\/?*[\]:]/g,' ').slice(0,31);while(used.has(nm))nm=nm.slice(0,28)+'_'+used.size;used.add(nm);XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),nm)});
+  const sp=[['Condition','Compartment','Path','Weighting',...P.bands.map(String),'Overall']];
+  P.conds.forEach(q=>list.forEach(({c})=>{const r=calc(c,q);sp.push([q.name,cname(c),'Total','Z (lin)',...(r.tot||P.bands.map(()=>null)).map(r2),r2(wsum(r.tot,'Z'))]);sp.push([q.name,cname(c),'Total','A',...(wsp(r.tot,'A')||P.bands.map(()=>null)).map(r2),r2(wsum(r.tot,'A'))]);for(const p in r.byP)sp.push([q.name,cname(c),p,'Z (lin)',...r.byP[p].map(r2),r2(wsum(r.byP[p],'Z'))])}));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sp),'Spectra');
+  if(P.alt){const ca=[['Condition','Folder','Compartment','Criteria dB(A)',mA()+' dB(A)',mB()+' dB(A)','Delta B-A','Margin A','Margin B','Result','Dominant source B','Share %']];
+    P.conds.forEach(q=>list.forEach(({node,c})=>{const r=cmpRow(c,q);ca.push([q.name,fp(node),cname(c),c.crit,r2(r.va),r2(r.vb),r2(r.d),r2(r.ma),r2(r.mb),RES.en[r.res],r.db?.s||'',r.db?r2(r.db.sh):null])}));
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ca),'Comparison A-B')}
+  if(P.el){const ea=[['Condition','Compartment','Element','Element name','FSB dB(A)','SSB dB(A)','Radiated dB(A)','Share of SB+SSB %','La overall dB re 1ug','Absorption effect max dB','Joiner effect max dB','Joiner panel damping','Damping above typical','TL available']];
+    P.conds.forEach(q=>list.forEach(({c})=>{const L=elCalc(c,q);if(!L.length)return;const At=wsum(toDB(zero().map((z,i)=>L.reduce((s2,x)=>s2+(x.sp&&x.sp[i]!=null?10**(x.sp[i]/10):0),0))),'A');
+      L.forEach(x=>{const a=wsum(x.sp,'A'),la=laCalc(x.el,q),t=treat(c.id,x.el);ea.push([q.name,cname(c),x.el,P.elAlias?.[x.el]||'',r2(wsum(x.SB,'A')),r2(wsum(x.SSB,'A')),r2(a),a!=null&&At!=null?r2(10**((a-At)/10)*100):null,r2(la.sp?dB(la.sp.reduce((s2,L2)=>s2+(L2==null?0:10**(L2/10)),0)):null),t.ab,t.jo,t.jp?1:0,t.hd?1:0,t.tl?1:0])})}));
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ea),'Elements')}
+  XLSX.writeFile(wb,base()+'_conditions.xlsx');toast('Excel exported: summary, conditions, one sheet per condition, spectra'+(P.el?' and elements':''));
+}
+$('#bImp').onclick=()=>$('#fImp').click();
+$('#fImp').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''};
+$('#bOpen').onclick=()=>$('#fOpen').click();
+$('#fOpen').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t);if(!o.comps||!o.tree)throw Error('not a SEA Noise Manager project');delete o.app;P=o;(P.paths||[]).forEach(p=>{if(UI.pf[p]==null)UI.pf[p]=true});UI.sel={t:'f',id:P.tree.ch[0]?.id};undo=[];save();render();toast('Project opened')}catch(err){toast('Open failed: '+err.message)}});e.target.value=''};
+$('#bRep').onclick=reportDialog;
+$('#bLoadB').onclick=()=>$('#fImpB').click();
+$('#fImpB').onchange=e=>{const f=e.target.files[0];if(f)importAlt(f);e.target.value=''};
+$('#models').addEventListener('click',e=>{if(e.target.id==='bLoadB2'){$('#fImpB').click();return}
+  if(e.target.closest('[data-mdel]')||e.target.closest('input'))return;
+  const ms=e.target.closest('[data-mshow]');if(ms){UI.det=ms.dataset.mshow;save();render()}
+  if(e.target.closest('[data-mdel]')){if(confirm('Remove model B from the project?')){P.alt=null;UI.cmp=false;UI.det='A';if(UI.mode==='ab')UI.mode='tot';save();render()}}});
+$('#models').addEventListener('dblclick',e=>{const r=e.target.closest('[data-mren]');if(!r)return;const w=r.dataset.mren;inlineEdit(r,w==='A'?mA():mB(),v=>commit(()=>{if(w==='A')P.mname=v;else P.alt.name=v}))});
+$('#models').addEventListener('change',e=>{if(e.target.id==='cmpT'){UI.cmp=e.target.checked;if(UI.cmp)UI.mode='ab';save();render()}});
+$('#bSave').onclick=saveJson;$('#bXls').onclick=exportXlsx;$('#bUndo').onclick=doUndo;
+$('#bNew').onclick=()=>{if(P&&!confirm('Start a new empty project? Unsaved changes are lost.'))return;P=null;undo=[];try{localStorage.removeItem(LS)}catch(e){}render()};
+$('#bNewCond').onclick=newCond;$('#bNewF').onclick=()=>newFolder(P.tree);$('#bExp').onclick=()=>openAll(true);$('#bCol').onclick=()=>openAll(false);
+document.addEventListener('dragover',e=>{if(e.dataTransfer?.types?.includes('Files')){e.preventDefault();$('#drop')?.classList.add('over')}});
+document.addEventListener('dragleave',e=>{if(!e.relatedTarget)$('#drop')?.classList.remove('over')});
+document.addEventListener('drop',e=>{const f=e.dataTransfer?.files?.[0];if(!f)return;e.preventDefault();$('#drop')?.classList.remove('over');if(/\.json$/i.test(f.name)){const dt=new DataTransfer();dt.items.add(f);$('#fOpen').files=dt.files;$('#fOpen').onchange({target:$('#fOpen')})}else importFile(f)});
+/* sidebar resize */
+{let sx=null,sw=0;$('#split').onmousedown=e=>{sx=e.clientX;sw=$('aside').offsetWidth;e.preventDefault()};document.addEventListener('mousemove',e=>{if(sx==null)return;const w=Math.max(240,Math.min(640,sw+e.clientX-sx));document.getElementById('app').style.setProperty('--sw',w+'px')});document.addEventListener('mouseup',()=>{if(sx!=null){sx=null;window.dispatchEvent(new Event('resize'))}})}
+
+load();render();
+window.__SNM={get P(){return P},UI,calc,wsum,compA};
+}
+</script>
+</body>
+</html>
