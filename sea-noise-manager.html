@@ -171,6 +171,7 @@ textarea.notes{width:100%;min-height:52px;border:1px solid var(--line);border-ra
 #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f2a35;color:#fff;padding:9px 16px;border-radius:8px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .25s;max-width:80vw}
 #toast.on{opacity:1}
 .tg-a{background:#e6f4ec;border-color:#a9d6bb;color:#1d6b45}.tg-j{background:#eaf1fb;border-color:#b5cbe8;color:#2c5f95}.tg-d{background:#fbf1e3;border-color:#e8c99a;color:#8a5a12}
+.rtab{border-collapse:collapse;font-size:13px}.rtab th{font-weight:500;background:none;position:static;color:var(--ink)}.rtab thead tr.u th{border-bottom:2px solid #1c232b;font-size:12px;color:var(--mut)}.rtab td{font-family:var(--sans);border-bottom:0}.rtab tr.cfirst td{border-top:1px solid #9aa4ae}
 .tg-x{background:#fdecec;border-color:#efb3b3;color:#a32020}
 #models{padding:0 10px 6px;border-bottom:1px solid var(--line)}
 .mrow{display:flex;align-items:center;gap:8px;padding:3px 2px;font-size:13.5px}
@@ -192,7 +193,7 @@ textarea.notes{width:100%;min-height:52px;border:1px solid var(--line);border-ra
 <body>
 <header>
   <img src="data:image/png;base64,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" alt="" width="30" height="30" style="border-radius:7px;flex:none">
-  <h1>SEA Noise Manager</h1><span class="ver">v1.3</span>
+  <h1>SEA Noise Manager</h1><span class="ver">v1.4</span>
   <span class="sub">Designer Noise SEA results · octave bands · navigation conditions</span>
   <button class="btn pri" id="bImp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg>Import Excel</button>
   <span class="fname" id="fname">no project</span>
@@ -277,26 +278,26 @@ function parseAOA(aoa){
   const items=[];let cur=null,src=null;
   for(let i=hC+1;i<aoa.length;i++){
     const r=aoa[i]||[],c0=str(r[0]),c1=str(r[1]),c2=str(r[2]);
-    if(c0){cur={name:c0,kind:'comp',src:{},crit:null,critName:'',xls:null,allp:{}};items.push(cur);src=null}
+    if(c0){cur={name:c0,kind:'comp',src:{},srcA:{},crit:null,critName:'',xls:null,allp:{},allpA:{}};items.push(cur);src=null}
     if(!cur)continue;
     if(c1)src=c1;
     if(!src||!c2)continue;
     const v=H.cols.map(k=>num(r[k])),sl=src.toLowerCase(),pl=c2.toLowerCase();
-    if(sl==='all sources'){if(pl==='total')cur.xls=num(r[H.aCol]);else if(v.some(x=>x!=null))cur.allp[c2]=v;continue}
+    if(sl==='all sources'){if(pl==='total')cur.xls=num(r[H.aCol]);else if(v.some(x=>x!=null)){cur.allp[c2]=v;cur.allpA[c2]=num(r[H.aCol])}continue}
     if(sl==='criteria'){if(pl!=='none'&&pl!=='excess'){cur.critName=c2;const a=num(r[H.aCol]);if(a!=null)cur.crit=a}continue}
     if(pl==='total')continue;
-    (cur.src[src]=cur.src[src]||{})[c2]=v;
+    (cur.src[src]=cur.src[src]||{})[c2]=v;(cur.srcA[src]=cur.srcA[src]||{})[c2]=num(r[H.aCol]);
   }
   for(const c of items){ /* paths that appear only in "All Sources" (e.g. HVAC breakout/outlet) */
     const have=new Set();Object.values(c.src).forEach(o=>Object.keys(o).forEach(p=>have.add(p)));
-    for(const p in c.allp)if(!have.has(p))(c.src['HVAC (unattributed)']=c.src['HVAC (unattributed)']||{})[p]=c.allp[p];
-    delete c.allp;
+    for(const p in c.allp)if(!have.has(p)){(c.src['HVAC (unattributed)']=c.src['HVAC (unattributed)']||{})[p]=c.allp[p];(c.srcA['HVAC (unattributed)']=c.srcA['HVAC (unattributed)']||{})[p]=c.allpA[p]}
+    delete c.allp;delete c.allpA;
   }
   if(hP>=0&&hP<hC){
     const G=bandHdr(aoa[hP]);let cp=null,s=null;
     for(let i=hP+1;i<hC;i++){
       const r=aoa[i]||[],c0=str(r[0]),c1=str(r[1]),c2=str(r[2]);
-      if(c0){cp={name:c0,kind:'poi',src:{},crit:null,critName:'',xls:null};items.push(cp);s=null}
+      if(c0){cp={name:c0,kind:'poi',src:{},srcA:{},crit:null,critName:'',xls:null};items.push(cp);s=null}
       if(!cp||!c1)continue;
       const l=c1.toLowerCase();
       if(l==='total'){cp.xls=num(r[G.aCol]);continue}
@@ -304,7 +305,7 @@ function parseAOA(aoa){
       if(l==='excess')continue;
       const v=G.cols.map(k=>num(r[k]));
       if(G.bands.join()!==H.bands.join())continue;
-      cp.src[c1]={Direct:v};
+      cp.src[c1]={Direct:v};cp.srcA[c1]={Direct:num(r[G.aCol])};
     }
   }
   const sources=[],paths=[];
@@ -328,7 +329,7 @@ function folder(name,ch=[]){return{id:uid('f'),t:'f',name,open:true,ch}}
 function leaf(cid){return{id:uid('n'),t:'c',cid,open:false}}
 function newProject(d,file){
   const comps={};const fc=folder('Compartments'),fp=folder('Positions of interest');
-  d.items.forEach((it,i)=>{const id=(it.kind==='poi'?'p':'c')+i;comps[id]={id,name:it.name,alias:'',kind:it.kind,src:it.src,crit:it.crit,critName:it.critName,xls:it.xls};(it.kind==='poi'?fp:fc).ch.push(leaf(id))});
+  d.items.forEach((it,i)=>{const id=(it.kind==='poi'?'p':'c')+i;comps[id]={id,name:it.name,alias:'',kind:it.kind,src:it.src,srcA:it.srcA,crit:it.crit,critName:it.critName,xls:it.xls};(it.kind==='poi'?fp:fc).ch.push(leaf(id))});
   const root={id:'root',t:'f',name:'root',open:true,ch:[fc]};if(fp.ch.length){fp.open=false;root.ch.push(fp)}
   const c0={id:uid('k'),name:'All sources',notes:'All sources running (as calculated in Designer Noise).',on:{},off:{}};
   P={v:1,file,imported:new Date().toISOString(),sheet:d.sheet,bands:d.bands,paths:d.paths,sources:d.sources,comps,tree:root,conds:[c0],active:c0.id,elAlias:{}};
@@ -341,8 +342,8 @@ function mergeProject(d,file){
   const byName={};Object.values(P.comps).forEach(c=>byName[c.kind+'|'+c.name]=c);
   const comps={},fresh=[];let k=0;
   d.items.forEach(it=>{const o=byName[it.kind+'|'+it.name];let id;
-    if(o){id=o.id;comps[id]={...o,src:it.src,xls:it.xls,critName:it.critName,crit:o.crit??it.crit}}
-    else{do{id=(it.kind==='poi'?'p':'c')+'x'+(k++)}while(P.comps[id]||comps[id]);comps[id]={id,name:it.name,alias:'',kind:it.kind,src:it.src,crit:it.crit,critName:it.critName,xls:it.xls};fresh.push(id)}});
+    if(o){id=o.id;comps[id]={...o,src:it.src,srcA:it.srcA,xls:it.xls,critName:it.critName,crit:o.crit??it.crit}}
+    else{do{id=(it.kind==='poi'?'p':'c')+'x'+(k++)}while(P.comps[id]||comps[id]);comps[id]={id,name:it.name,alias:'',kind:it.kind,src:it.src,srcA:it.srcA,crit:it.crit,critName:it.critName,xls:it.xls};fresh.push(id)}});
   const prune=n=>{n.ch=n.ch.filter(x=>x.t==='f'||comps[x.cid]);n.ch.forEach(x=>x.t==='f'&&prune(x))};
   P.comps=comps;prune(P.tree);P.el=buildEl(d.el,comps);remapAlt();P.elAlias=P.elAlias||{};
   if(fresh.length){const f=folder('New in '+file);fresh.forEach(id=>f.ch.push(leaf(id)));P.tree.ch.push(f)}
@@ -359,7 +360,7 @@ function importFile(file){
     if(P&&confirm('Update the current project with these results?\n\nOK = keep conditions, folders and criteria (matched by compartment name)\nCancel = start a new project')){const n=mergeProject(d,file.name);msg='Results updated'+(n?` · ${n} new compartments`:'')}
     else{newProject(d,file.name);msg='Imported'}
     const nc=d.items.filter(i=>i.kind==='comp').length,np=d.items.length-nc;
-    let dev=0;Object.values(P.comps).forEach(c=>{if(c.xls!=null){const t=wsum(calc(c,{on:{},off:{}},{}).tot,'A');if(t!=null)dev=Math.max(dev,Math.abs(t-c.xls))}});
+    let dev=0;Object.values(P.comps).forEach(c=>{if(c.xls!=null){const t=compA(c,{on:{},off:{}});if(t!=null)dev=Math.max(dev,Math.abs(t-c.xls))}});
     let edev=0,ne=0;const k0={on:{},off:{}};if(P.el)Object.values(P.comps).forEach(c=>{const L=elCalc(c,k0);if(!L.length)return;ne+=L.length;const r=calc(c,k0,{AB:false});const a=wsum(toDB(zero().map((z,i)=>L.reduce((s,x)=>s+(x.sp&&x.sp[i]!=null?10**(x.sp[i]/10):0),0))),'A'),b=wsum(r.tot,'A');if(a!=null&&b!=null)edev=Math.max(edev,Math.abs(a-b))});
     toast(`${msg}: ${nc} compartments, ${np} positions, ${d.sources.length} sources · max Δ vs Excel totals ${dev.toFixed(1)} dB(A)`+(P.el?` · ${ne} element entries (panels Σ vs SB+SSB: Δ ${edev.toFixed(1)} dB)`:' · no element sheets found'));
     save();render();
@@ -390,7 +391,9 @@ const wsp=(sp,w)=>sp?sp.map((L,i)=>L==null?null:L+wt(P.bands[i],w)):null;
 const scol=s=>PAL[P.sources.indexOf(s)%PAL.length];
 const cname=c=>c.alias||short(c.name);
 const ipaths=c=>P.paths.filter(p=>Object.values(c.src).some(o=>o[p]));
-function compA(c,k){return wsum(calc(c,k).tot,'A')}
+/* dB(A) totals from the dB(A) values Designer Noise gives per source and path (more precise than re-summing the rounded bands) */
+function levA(c,k,path){if(!c||!c.srcA)return null;let E=0;for(const s in c.srcA){if(!isOn(k,s))continue;const off=+(k.off[s]||0),o=c.srcA[s];for(const p in o){if(UI.pf[p]===false||(path&&p!==path)||o[p]==null)continue;E+=10**((o[p]+off)/10)}}return dB(E)}
+function compA(c,k=cond()){return c&&c.srcA?levA(c,k):wsum(calc(c,k).tot,'A')}
 function dominant(c,k){const r=calc(c,k);let best=null,bv=-1e9,tv=wsum(r.tot,'A');for(const x of r.srcs){if(!x.on)continue;const v=wsum(x.sp,'A');if(v!=null&&v>bv){bv=v;best=x.s}}return best?{s:best,v:bv,sh:tv!=null?10**((bv-tv)/10)*100:null}:null}
 
 /* ---------- tree helpers ---------- */
@@ -609,8 +612,15 @@ function vFolder(m,f){
   ${cmpOn()?'':`<div class="kpi"><div class="l">Over criteria · ${esc(k.name)}</div><div class="v s ${nx?'bad':'good'}">${ncr?nx+' / '+ncr:'no criteria'}</div></div>`}
   ${cmpOn()?cmpKpiHtml(list,k):`<div class="kpi"><div class="l">Highest</div><div class="v s">${top?f1(top.v):'–'}<span class="u">${top?esc(cname(top.c)):''}</span></div></div>`}</div></div>
   <div class="meta"><span>Active condition <b>${esc(k.name)}</b></span><span>Sources on <b>${P.sources.filter(s=>isOn(k,s)).length}/${P.sources.length}</b></span><span>Paths <b>${P.paths.filter(p=>UI.pf[p]!==false).join(' + ')}</b></span><span>Levels in <b>dB(A)</b></span></div>
-  <div class="tool">${pathChips()}<span style="flex:1"></span><button class="btn sm" id="bCrit">Set criteria for all…</button><button class="btn sm" data-copy="${cmpOn()?'tCmp':'tOv'}">Copy table</button></div>
-  ${list.length?(cmpOn()?cmpTable(list,k):overviewTable(list,k)):'<p style="color:var(--mut)">Empty folder – drag compartments here.</p>'}`;
+  <div class="tool"><span class="seg" data-seg="ftab">${[['ov','Overview'],['rt','Results table']].map(([v,l])=>`<button class="${(UI.ftab||'ov')===v?'on':''}" data-v="${v}">${l}</button>`).join('')}</span>${UI.ftab==='rt'?'':pathChips()}<span style="flex:1"></span><button class="btn sm" id="bCrit">Set criteria for all…</button>${UI.ftab==='rt'?'':`<button class="btn sm" data-copy="${cmpOn()?'tCmp':'tOv'}">Copy table</button>`}</div>
+  ${UI.ftab==='rt'?vRtab(m,f):list.length?(cmpOn()?cmpTable(list,k):overviewTable(list,k)):'<p style="color:var(--mut)">Empty folder – drag compartments here.</p>'}`;
+  if(UI.ftab==='rt'){
+    m.querySelectorAll('[data-rq]').forEach(i=>i.onchange=()=>{UI.rexcl=UI.rexcl||{};if(i.checked)delete UI.rexcl[i.dataset.rq];else UI.rexcl[i.dataset.rq]=1;render()});
+    const la=$('#labA'),lb=$('#labB');if(la)la.onchange=()=>commit(()=>P.labA=la.value.trim()||'BEFORE');if(lb)lb.onchange=()=>commit(()=>P.labB=lb.value.trim()||'AFTER');
+    $('#rpoi').onchange=e=>{UI.rpoi=e.target.checked;render()};
+    $('#bRtCopy').onclick=()=>{const list2=compsIn(f).filter(x=>UI.rpoi||x.c.kind!=='poi'),conds=P.conds.filter(q=>!(UI.rexcl||{})[q.id]),dec=+UI.rdec===1,D={...rtabData(list2,conds,dec),dec};
+      const {aoa}=rtabAoa(D);copyRich(rtabHtml(D,true),aoa.map(r=>r.map(v=>v??'').join('\t')).join('\n'))};
+  }
   $('#bCrit').onclick=()=>{const v=prompt(`Criteria dB(A) for the ${list.length} items of “${f.name}” (empty = none):`,'');if(v===null)return;const n=v.trim()===''?null:num(v);commit(()=>list.forEach(({c})=>c.crit=n))};
 }
 function vCond(m,k){
@@ -620,7 +630,7 @@ function vCond(m,k){
   <div class="condhead"><input class="cn" id="cn" value="${esc(k.name)}"></div>
   <textarea class="notes" id="cnotes" placeholder="Description: speed, propulsion mode, generators running, load…">${esc(k.notes||'')}</textarea>
   <div class="tool" style="margin-top:10px">${k.id!==P.active?`<button class="btn sm pri" data-act="${k.id}">Make active</button>`:'<span class="pill">active condition</span>'}
-  <button class="btn sm" id="cAll">All on</button><button class="btn sm" id="cNone">All off</button><button class="btn sm" id="cInv">Invert</button><button class="btn sm" id="cZero">Reset offsets</button>
+  <label class="chip" title="If off, the results table shows “-” and no compliance is evaluated in this condition (e.g. manoeuvring)"><input type="checkbox" id="cChk" ${chkOn(k)?'checked':''} style="margin:0"> Check compliance</label><button class="btn sm" id="cAll">All on</button><button class="btn sm" id="cNone">All off</button><button class="btn sm" id="cInv">Invert</button><button class="btn sm" id="cZero">Reset offsets</button>
   <span style="flex:1"></span><button class="btn sm" id="cDup">Duplicate</button><button class="btn sm" id="cDel" ${P.conds.length<2?'disabled':''}>Delete</button></div>
   <div class="secttl"><h3>Sources</h3><span class="note">Offset in dB applied to the source in all compartments (e.g. −6 dB propeller at reduced speed, +3 dB two identical units).</span><button class="btn sm" data-copy="tCs">Copy table</button></div>
   <div class="tw"><table id="tCs"><thead><tr><th>On</th><th class="t">Source</th><th>Offset dB</th><th>Dominant in</th><th>Max received dB(A)</th><th class="t">in</th></tr></thead><tbody>
@@ -629,6 +639,7 @@ function vCond(m,k){
   ${cmpOn()?cmpTable(list,k):overviewTable(list,k)}`;
   $('#cn').onchange=e=>commit(()=>k.name=e.target.value.trim()||k.name);
   $('#cnotes').onchange=e=>commit(()=>k.notes=e.target.value);
+  $('#cChk').onchange=e=>commit(()=>{if(e.target.checked)delete k.chk;else k.chk=false});
   $('#cAll').onclick=()=>commit(()=>k.on={});
   $('#cNone').onclick=()=>commit(()=>P.sources.forEach(s=>k.on[s]=false));
   $('#cInv').onclick=()=>commit(()=>P.sources.forEach(s=>k.on[s]=!isOn(k,s)));
@@ -831,7 +842,7 @@ function remapAlt(){if(!P.alt)return;const by={};Object.values(P.comps).forEach(
   Object.values(P.alt.comps).forEach(b=>{const a=by[b.kind+'|'+b.name];if(a){P.alt.map[a]=b.id;P.alt.rmap[b.id]=a}})}
 function setAlt(d,file){
   if(d.bands.join()!==P.bands.join())throw Error('the octave bands of model B do not match model A');
-  const comps={};d.items.forEach((it,i)=>{const id='B'+i;comps[id]={id,alt:true,name:it.name,alias:'',kind:it.kind,src:it.src,crit:it.crit,critName:it.critName,xls:it.xls}});
+  const comps={};d.items.forEach((it,i)=>{const id='B'+i;comps[id]={id,alt:true,name:it.name,alias:'',kind:it.kind,src:it.src,srcA:it.srcA,crit:it.crit,critName:it.critName,xls:it.xls}});
   d.sources.forEach(s=>{if(!P.sources.includes(s))P.sources.push(s)});d.paths.forEach(p=>{if(!P.paths.includes(p))P.paths.push(p);if(UI.pf[p]==null)UI.pf[p]=true});
   P.alt={name:P.alt?.name||'Treated',file,comps,map:{},rmap:{},el:buildEl(d.el,comps)};P.mname=P.mname||'Original';remapAlt();
   Object.values(P.comps).forEach(c=>{const b=altOf(c);if(c.crit==null&&b&&b.crit!=null)c.crit=b.crit});
@@ -851,8 +862,8 @@ const RES={
 function result(crit,va,vb){if(vb==null)return'na';if(crit==null)return'none';const a=va!=null&&va>crit,b=vb>crit;return!a&&!b?'both':a&&!b?'fixed':a&&b?'still':'worse'}
 const resCls={both:'good',fixed:'good',still:'bad',worse:'bad',none:'',na:''};
 function resPill(k,lang='en'){const col={both:'tg-a',fixed:'tg-a',still:'tg-x',worse:'tg-x',none:'',na:''}[k];return`<span class="pill ${col}">${RES[lang][k]}</span>`}
-function cmpRow(c,k){const b=altOf(c),va=compA(c,k),vb=b?compA(b,k):null;return{c,b,va,vb,d:va!=null&&vb!=null?vb-va:null,ma:c.crit!=null&&va!=null?c.crit-va:null,mb:c.crit!=null&&vb!=null?c.crit-vb:null,res:result(c.crit,va,vb),da:dominant(c,k),db:b?dominant(b,k):null}}
-function cmpKpis(list,k){const R=list.map(({c})=>cmpRow(c,k)),wc=R.filter(r=>r.c.crit!=null);
+function cmpRow(c,k){const b=altOf(c),va=compA(c,k),vb=b?compA(b,k):null,cr=chkOn(k)?c.crit:null;return{c,b,va,vb,d:va!=null&&vb!=null?vb-va:null,ma:cr!=null&&va!=null?cr-va:null,mb:cr!=null&&vb!=null?cr-vb:null,res:result(cr,va,vb),da:dominant(c,k),db:b?dominant(b,k):null}}
+function cmpKpis(list,k){const R=list.map(({c})=>cmpRow(c,k)),wc=chkOn(k)?R.filter(r=>r.c.crit!=null):[];
   const okA=wc.filter(r=>r.ma!=null&&r.ma>=0).length,okB=wc.filter(r=>r.mb!=null&&r.mb>=0).length,ds=R.filter(r=>r.d!=null).map(r=>r.d);
   return{R,n:wc.length,okA,okB,fixed:R.filter(r=>r.res==='fixed').length,still:R.filter(r=>r.res==='still').length,worse:R.filter(r=>r.res==='worse').length,dmean:ds.length?ds.reduce((a,b)=>a+b,0)/ds.length:null}}
 function cmpTable(list,k){
@@ -925,6 +936,67 @@ function elCmpStrip(cA,b,e,k){
   <span>La Σ <b class="mono">${fu(ga)} → ${fu(gb)}</b> ${luN()}</span><span>Treatment ${esc(mA())}: ${treatHtml(treat(cA.id,e,EA))}</span><span>${esc(mB())}: ${treatHtml(treat(b.id,e,EB))}</span>
   <span style="flex:1"></span><span style="color:var(--mut)">Show</span><span class="seg" data-seg="det">${[['A',mA()],['B',mB()]].map(([v,l])=>`<button class="${(UI.det||'A')===v?'on':''}" data-v="${v}">${esc(l)}</button>`).join('')}</span></div>`;
 }
+/* ---------- results table in report format (compartment × condition × before/after) ---------- */
+const PATHT={AB:'ABN',SB:'SBN',SSB:'SSBN',HVAC:'HVAC',Direct:'Direct'};
+const chkOn=q=>q.chk!==false;
+function rtabData(list,conds,dec){
+  const hasB=!!P.alt,lab=[P.labA||'BEFORE',P.labB||'AFTER'];
+  const paths=P.paths.filter(p=>list.some(({c})=>ipaths(c).includes(p)||(altOf(c)&&ipaths(altOf(c)).includes(p))));
+  const rnd=v=>v==null||!isFinite(v)?null:dec?Math.round(v*10)/10:Math.round(v);
+  const rows=[];
+  for(const{node,c}of list){const ms=hasB?[c,altOf(c)]:[c];
+    for(const q of conds)ms.forEach((m,i)=>{let v=null,pv=paths.map(()=>null),present=!!m;
+      if(m){const r=calc(m,q);v=rnd(compA(m,q));pv=paths.map(p=>rnd(m.srcA?levA(m,q,p):wsum(r.byP[p],'A')))}
+      const ok=!present||c.crit==null||!chkOn(q)||v==null?null:v<=c.crit;
+      rows.push({node,c,q,mi:i,lab:hasB?lab[i]:'',pv,v,ok,present})})}
+  return{hasB,paths,rows,lab};
+}
+function rtabHtml(D,word){
+  const fm=v=>v==null?'–':String(v).replace('.',D.dec?',':'.');
+  const nc=D.hasB?2:1,per=nc;let h='';
+  const th=`style="font-weight:normal;padding:2px 10px;text-align:center"`;
+  h+=`<table class="rtab" ${word?'style="border-collapse:collapse;font-family:Calibri,Arial,sans-serif;font-size:10pt"':''}><thead><tr><th ${th}></th><th ${th}></th>${D.hasB?`<th ${th}></th>`:''}${D.paths.map(p=>`<th ${th}>${PATHT[p]||p}</th>`).join('')}<th ${th}>LeqA</th><th ${th}></th><th ${th}>NOISE<br>CRITERIA</th></tr>
+  <tr class="u"><th></th><th></th>${D.hasB?'<th></th>':''}${D.paths.map(()=>`<th ${th}>[ dBA ]</th>`).join('')}<th ${th}>[ dBA ]</th><th></th><th ${th}>[ dBA ]</th></tr></thead><tbody>`;
+  const byC=[];D.rows.forEach(r=>{let g=byC.find(x=>x.c===r.c);if(!g)byC.push(g={c:r.c,rows:[]});g.rows.push(r)});
+  const bt=word?'border-top:1.5pt solid #000;':'';
+  for(const g of byC){const n=g.rows.length;
+    g.rows.forEach((r,i)=>{const first=i===0,qfirst=r.mi===0;
+      const tick=r.ok==null?'<span style="color:#666">-</span>':r.ok?'<span style="color:#2e9e3e;font-weight:bold">✓</span>':'<span style="color:#c62828;font-weight:bold">✗</span>';
+      const td=`style="padding:2px 10px;text-align:center;${first?bt:''}"`;
+      h+=`<tr class="${first?'cfirst':''}">${first?`<td rowspan="${n}" style="padding:2px 10px;text-align:left;vertical-align:middle;${bt}">${esc(cname(r.c))}</td>`:''}
+      ${qfirst?`<td rowspan="${per}" style="padding:2px 10px;text-align:left;vertical-align:middle;${first?bt:''}">${esc(r.q.name.toUpperCase())}</td>`:''}
+      ${D.hasB?`<td ${td}>${esc(r.lab)}</td>`:''}${r.pv.map(v=>`<td ${td}>${fm(v)}</td>`).join('')}<td ${td}>${fm(r.v)}</td><td style="padding:2px 10px;text-align:center;background:#f0f0f0;${first?bt:''}">${tick}</td>
+      ${first?`<td rowspan="${n}" style="padding:2px 10px;text-align:center;vertical-align:middle;${bt}">${r.c.crit==null?'–':fm(r.c.crit)}</td>`:''}</tr>`})}
+  return h+'</tbody></table>';
+}
+function rtabAoa(D){
+  const head=['Compartment','Condition',...(D.hasB?['']:[]),...D.paths.map(p=>(PATHT[p]||p)+' [dBA]'),'LeqA [dBA]','Complies','Noise criteria [dBA]'];
+  const aoa=[head],merges=[],off=D.hasB?1:0,nc=head.length;let r0=1;
+  const byC=[];D.rows.forEach(r=>{let g=byC.find(x=>x.c===r.c);if(!g)byC.push(g={c:r.c,rows:[]});g.rows.push(r)});
+  for(const g of byC){const n=g.rows.length;
+    g.rows.forEach((r,i)=>{aoa.push([i===0?cname(r.c):'',r.mi===0?r.q.name.toUpperCase():'',...(D.hasB?[r.lab]:[]),...r.pv,r.v,r.ok==null?'-':r.ok?'✓':'✗',i===0?r.c.crit:null]);
+      if(r.mi===0&&D.hasB)merges.push({s:{r:r0+i,c:1},e:{r:r0+i+1,c:1}})});
+    if(n>1){merges.push({s:{r:r0,c:0},e:{r:r0+n-1,c:0}});merges.push({s:{r:r0,c:nc-1},e:{r:r0+n-1,c:nc-1}})}
+    r0+=n}
+  return{aoa,merges};
+}
+function copyRich(html,plain){
+  try{if(window.ClipboardItem&&navigator.clipboard?.write){navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]).then(()=>toast('Table copied – paste it into Word or Excel'),()=>fallback());return}}catch(e){}
+  fallback();
+  function fallback(){const d=document.createElement('div');d.contentEditable='true';d.style.cssText='position:fixed;left:-9999px;top:0';d.innerHTML=html;document.body.append(d);const r=document.createRange();r.selectNodeContents(d);const s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy');s.removeAllRanges();d.remove();toast('Table copied – paste it into Word or Excel')}
+}
+function vRtab(m,f){
+  const list=compsIn(f).filter(x=>UI.rpoi||x.c.kind!=='poi'),conds=P.conds.filter(q=>!(UI.rexcl||{})[q.id]);
+  const dec=+UI.rdec===1,D={...rtabData(list,conds,dec),dec};
+  return`<div class="tool"><span>Conditions</span>${P.conds.map(q=>`<label class="chip"><input type="checkbox" data-rq="${q.id}" ${(UI.rexcl||{})[q.id]?'':'checked'} style="margin:0"> ${esc(q.name)}${chkOn(q)?'':' <span title="compliance not checked in this condition">(–)</span>'}</label>`).join('')}
+   ${P.alt?`<span>Rows</span><input class="yr" id="labA" value="${esc(P.labA||'BEFORE')}" style="width:90px"><input class="yr" id="labB" value="${esc(P.labB||'AFTER')}" style="width:90px">`:''}
+   <span>Decimals</span><span class="seg" data-seg="rdec">${[[0,'0'],[1,'0.0']].map(([v,l])=>`<button class="${(+UI.rdec===1?1:0)===v?'on':''}" data-v="${v}">${l}</button>`).join('')}</span>
+   <label class="chip"><input type="checkbox" id="rpoi" ${UI.rpoi?'checked':''} style="margin:0"> positions</label>
+   <span style="flex:1"></span><button class="btn sm pri" id="bRtCopy">Copy for Word</button></div>
+  <div class="note" style="color:var(--mut);font-size:12.5px;margin:-2px 0 8px">Levels in dB(A) of the sources running in each condition, rounded as shown; ✓ / ✗ compare the rounded LeqA with the criterion; “-” = no criterion or compliance not checked in that condition (set it in the condition editor).</div>
+  <div class="tw" style="padding:12px 14px" id="rtWrap">${list.length&&conds.length?rtabHtml(D):'<p style="color:var(--mut)">Nothing to show.</p>'}</div>`;
+}
+
 /* ---------- report ---------- */
 function reportDialog(){
   if(!P)return;const d=document.createElement('div');d.id='dlg';
@@ -934,26 +1006,27 @@ function reportDialog(){
   <label class="dl">Language <select id="rLang"><option value="es">Español</option><option value="en">English</option></select></label>
   <label class="dl">Scope <select id="rScope"><option value="root">All compartments</option>${fl.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}</select></label>
   <div class="dl">Conditions</div>${P.conds.map(q=>`<label class="dl" style="padding-left:12px"><input type="checkbox" data-rc="${q.id}" ${q.id===P.active?'checked':''}> ${esc(q.name)}</label>`).join('')}
+  <label class="dl"><input type="checkbox" id="rTab" checked> Results table (${P.alt?'BEFORE / AFTER ':''}by condition, ABN · SBN · SSBN · LeqA · ✓)</label>
   <label class="dl"><input type="checkbox" id="rDet" checked> One page per compartment (chart, bands, sources, panels)</label>
   <label class="dl"><input type="checkbox" id="rPoi"> Include positions of interest</label>
   <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn" id="rCancel">Cancel</button><button class="btn" id="rDl">Download .html</button><button class="btn pri" id="rOpen">Open report</button></div></div>`;
   document.body.append(d);
   const go=dlOnly=>{const conds=P.conds.filter(q=>d.querySelector(`[data-rc="${q.id}"]`).checked);if(!conds.length){toast('Choose at least one condition');return}
     const sc=$('#rScope').value,f=sc==='root'?P.tree:findNode(sc).n;let list=compsIn(f);if(!$('#rPoi').checked)list=list.filter(x=>x.c.kind!=='poi');
-    const html=buildReport({lang:$('#rLang').value,conds,list,det:$('#rDet').checked,scope:sc==='root'?null:f.name});d.remove();render();
+    const html=buildReport({lang:$('#rLang').value,conds,list,det:$('#rDet').checked,tab:$('#rTab').checked,scope:sc==='root'?null:f.name});d.remove();render();
     const name=base()+'_report.html';
     if(!dlOnly){const w=window.open('','_blank');if(w){w.document.open();w.document.write(html);w.document.close();return}}
     dl(new Blob([html],{type:'text/html'}),name);toast('Report downloaded – open it in the browser and print to PDF')};
   $('#rCancel').onclick=()=>d.remove();$('#rOpen').onclick=()=>go(false);$('#rDl').onclick=()=>go(true);
 }
 function chartPng(o,W=1100,H=470){const c=document.createElement('canvas');c.width=W*2;c.height=H*2;const x=c.getContext('2d');x.scale(2,2);paint(x,W,H,o);return c.toDataURL('image/png')}
-function buildReport({lang,conds,list,det,scope}){
+function buildReport({lang,conds,list,det,scope,tab}){
   const es=lang==='es',T=(a,b)=>es?a:b,hasB=!!P.alt,dec=v=>es?String(v).replace('.',','):String(v);
   const F=v=>dec(f1(v)),S=v=>dec(fsg(v)),now=new Date().toLocaleDateString(es?'es-ES':'en-GB');
   const st=`body{font:14px/1.5 'IBM Plex Sans',Segoe UI,Arial,sans-serif;color:#1c232b;max-width:1060px;margin:0 auto;padding:28px}h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:28px 0 8px;border-bottom:2px solid #2c5f95;padding-bottom:4px}h3{font-size:16px;margin:0 0 6px}
   table{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0 12px}th,td{border:1px solid #d6dbe0;padding:4px 7px;text-align:right}th{background:#eef2f6}td.t,th.t{text-align:left}.ok{color:#23845a;font-weight:600}.bad{color:#c62828;font-weight:600}
   .pg{page-break-before:always;padding-top:6px}.meta{color:#5a6570;font-size:13px}.pill{display:inline-block;border-radius:9px;padding:0 7px;font-size:11.5px;border:1px solid #ccc}.g{background:#e6f4ec;border-color:#a9d6bb;color:#1d6b45}.r{background:#fdecec;border-color:#efb3b3;color:#a32020}
-  img{width:100%;border:1px solid #e1e5e9}.bar{position:sticky;top:0;background:#fff;padding:8px 0;border-bottom:1px solid #ddd;margin-bottom:14px}.bar button{font:inherit;padding:6px 12px;margin-right:6px}@media print{.bar{display:none}body{padding:0}}`;
+  img{width:100%;border:1px solid #e1e5e9}table.rtab{width:auto;font-size:12.5px}table.rtab th,table.rtab td{border:0}table.rtab thead tr:last-child th{border-bottom:1.5px solid #000}.bar{position:sticky;top:0;background:#fff;padding:8px 0;border-bottom:1px solid #ddd;margin-bottom:14px}.bar button{font:inherit;padding:6px 12px;margin-right:6px}@media print{.bar{display:none}body{padding:0}}`;
   const pill=k=>`<span class="pill ${k==='both'||k==='fixed'?'g':k==='still'||k==='worse'?'r':''}">${RES[lang][k]}</span>`;
   let h=`<!DOCTYPE html><html lang="${lang}"><head><meta charset="utf-8"><title>${T('Informe de ruido','Noise report')} – ${esc(base())}</title><style>${st}</style></head><body>
   <div class="bar"><button onclick="window.print()">${T('Imprimir / Guardar PDF','Print / Save PDF')}</button><span class="meta">${T('Usa “Guardar como PDF” en el diálogo de impresión.','Use “Save as PDF” in the print dialog.')}</span></div>
@@ -962,8 +1035,10 @@ function buildReport({lang,conds,list,det,scope}){
   <h2>1. ${T('Condiciones de navegación','Navigation conditions')}</h2><table><tr><th class="t">${T('Condición','Condition')}</th><th class="t">${T('Descripción','Description')}</th><th class="t">${T('Fuentes en funcionamiento (offset dB)','Sources running (offset dB)')}</th></tr>
   ${conds.map(q=>`<tr><td class="t"><b>${esc(q.name)}</b></td><td class="t">${esc(q.notes||'')}</td><td class="t">${P.sources.filter(s=>isOn(q,s)).map(s=>esc(s)+(q.off[s]?` (${S(q.off[s])})`:'')).join(', ')}</td></tr>`).join('')}</table>
   <p class="meta">${T('Niveles en dB(A) como suma energética de las bandas de octava 31,5 Hz – 8 kHz de las fuentes activas. Margen = criterio − nivel (negativo: incumple).','Levels in dB(A), energetic sum of the 31.5 Hz – 8 kHz octave bands of the running sources. Margin = criterion − level (negative: non-compliant).')}</p>`;
+  let sn=2;
+  if(tab){const D={...rtabData(list,conds,false),dec:false};h+=`<h2>${sn++}. ${T('Tabla de resultados','Results table')}</h2>${rtabHtml(D,true)}<p class="meta">${T('ABN: ruido aéreo · SBN: ruido estructural · SSBN: ruido estructural secundario · LeqA: nivel total. ✓ cumple, ✗ no cumple, - sin criterio o no aplicable en la condición.','ABN: airborne noise · SBN: structure-borne noise · SSBN: secondary structure-borne noise · LeqA: total level. ✓ complies, ✗ does not comply, - no criterion or not applicable in the condition.')}</p>`}
   conds.forEach((q,qi)=>{const K=cmpKpis(list,q);
-    h+=`<h2>${2+qi}. ${T('Resumen','Summary')} – ${esc(q.name)}</h2>
+    h+=`<h2>${sn+qi}. ${T('Resumen','Summary')} – ${esc(q.name)}</h2>
     <p>${K.n?(hasB?T(`Cumplen ${K.okA} de ${K.n} espacios con ${esc(mA())} y ${K.okB} de ${K.n} con ${esc(mB())}. Corregidos con el tratamiento: ${K.fixed}; siguen superando: ${K.still}${K.worse?`; empeoran: ${K.worse}`:''}. Variación media ${S(K.dmean)} dB.`,`${K.okA} of ${K.n} spaces comply with ${esc(mA())} and ${K.okB} of ${K.n} with ${esc(mB())}. Fixed by the treatment: ${K.fixed}; still exceeding: ${K.still}${K.worse?`; worse: ${K.worse}`:''}. Mean change ${S(K.dmean)} dB.`):T(`Cumplen ${K.okA} de ${K.n} espacios con criterio.`,`${K.okA} of ${K.n} spaces with criteria comply.`)):T('No hay criterios definidos.','No criteria defined.')}</p>
     <table><tr><th class="t">${T('Espacio','Space')}</th><th>${T('Criterio','Criterion')}</th><th>${esc(mA())}</th>${hasB?`<th>${esc(mB())}</th><th>Δ</th>`:''}<th>${T('Margen','Margin')} A</th>${hasB?`<th>${T('Margen','Margin')} B</th><th class="t">${T('Resultado','Result')}</th>`:''}</tr>
     ${K.R.map(r=>`<tr><td class="t">${esc(cname(r.c))}</td><td>${r.c.crit==null?'–':F(r.c.crit)}</td><td>${F(r.va)}</td>${hasB?`<td><b>${F(r.vb)}</b></td><td>${S(r.d)}</td>`:''}<td class="${r.ma==null?'':r.ma<0?'bad':'ok'}">${S(r.ma)}</td>${hasB?`<td class="${r.mb==null?'':r.mb<0?'bad':'ok'}">${S(r.mb)}</td><td class="t">${pill(r.res)}</td>`:''}</tr>`).join('')}</table>`;
@@ -1098,6 +1173,7 @@ function exportXlsx(){
   if(P.alt){const ca=[['Condition','Folder','Compartment','Criteria dB(A)',mA()+' dB(A)',mB()+' dB(A)','Delta B-A','Margin A','Margin B','Result','Dominant source B','Share %']];
     P.conds.forEach(q=>list.forEach(({node,c})=>{const r=cmpRow(c,q);ca.push([q.name,fp(node),cname(c),c.crit,r2(r.va),r2(r.vb),r2(r.d),r2(r.ma),r2(r.mb),RES.en[r.res],r.db?.s||'',r.db?r2(r.db.sh):null])}));
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ca),'Comparison A-B')}
+  {const D={...rtabData(list.filter(x=>x.c.kind!=='poi'),P.conds,false),dec:false},{aoa,merges}=rtabAoa(D),ws=XLSX.utils.aoa_to_sheet(aoa);ws['!merges']=merges;XLSX.utils.book_append_sheet(wb,ws,'Report table')}
   if(P.el){const ea=[['Condition','Compartment','Element','Element name','FSB dB(A)','SSB dB(A)','Radiated dB(A)','Share of SB+SSB %','La overall dB re 1ug','Absorption effect max dB','Joiner effect max dB','Joiner panel damping','Damping above typical','TL available']];
     P.conds.forEach(q=>list.forEach(({c})=>{const L=elCalc(c,q);if(!L.length)return;const At=wsum(toDB(zero().map((z,i)=>L.reduce((s2,x)=>s2+(x.sp&&x.sp[i]!=null?10**(x.sp[i]/10):0),0))),'A');
       L.forEach(x=>{const a=wsum(x.sp,'A'),la=laCalc(x.el,q),t=treat(c.id,x.el);ea.push([q.name,cname(c),x.el,P.elAlias?.[x.el]||'',r2(wsum(x.SB,'A')),r2(wsum(x.SSB,'A')),r2(a),a!=null&&At!=null?r2(10**((a-At)/10)*100):null,r2(la.sp?dB(la.sp.reduce((s2,L2)=>s2+(L2==null?0:10**(L2/10)),0)):null),t.ab,t.jo,t.jp?1:0,t.hd?1:0,t.tl?1:0])})}));
