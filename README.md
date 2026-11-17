@@ -15,7 +15,7 @@ Herramienta en un único archivo HTML para analizar los resultados de ruido calc
   - Panel: ruido radiado, aceleración (dB, mm/s² o mm/s) y eficiencia de radiación; propiedades (σ, absorción, joiner, TL, η), compartimentos a los que radia y elementos conectados. Los paneles tratados se marcan con **T**.
   - Carpeta y condición: tabla de todos los compartimentos con criterio, margen y fuente dominante.
 - **Comparación de dos modelos** (A: situación original, B: con tratamiento): Δ por espacio, por fuente, por banda y por panel; resultado de cumplimiento (*cumple*, *corregido con el tratamiento*, *sigue superando*, *empeora*).
-- **Tabla de resultados** en formato de informe: por espacio y condición, filas BEFORE / AFTER con ABN, SBN, SSBN, LeqA, ✓ / ✗ y criterio (copiar a Word o exportar a Excel). En cada condición se puede indicar si se evalúa el cumplimiento (p. ej. maniobra → “-”).
+- **Tabla de resultados** en formato de informe: por espacio y condición, filas ORIGINAL / TREATED (nombres de los modelos A y B) con ABN, SBN, SSBN, LeqA, ✓ / ✗ y criterio (copiar a Word o exportar a Excel). En cada condición se puede indicar si se evalúa el cumplimiento (p. ej. maniobra → “-”).
 - **Informe** en español o inglés (resumen de cumplimiento y una página por espacio con gráfico A/B, bandas, fuentes y paneles con cambio de tratamiento), para imprimir o guardar en PDF.
 - **Exportación a Excel** y proyectos `.json` (guardar / abrir), con recuperación de la última sesión.
 
